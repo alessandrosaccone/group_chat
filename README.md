@@ -6,5 +6,4 @@ Within each room, messages should be delivered in causal order.
 The application should be fully distributed, meaning that user clients should exchange messages without relying on any centralized server.
 The application should be highly available, meaning that users should be able to use the chat (read and write messages) even if they are temporarily disconnected from the network. 
 
-Assumptions
-• Clients and links are reliable, but clients can join and leave the network at any time.
+Assumptions: clients and links are reliable, but clients can join and leave the network at any time.
