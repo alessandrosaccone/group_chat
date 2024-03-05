@@ -1,0 +1,29 @@
+package org.example.demo.frontend.controllers;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import org.example.demo.frontend.listeners.ViewSource;
+
+public class ChatCreationController implements ViewSource {
+    @FXML
+    private Button createChatButton;
+    @FXML
+    private void handleCreateChatButtonClick() {
+        System.out.println("Create chat button clicked!");
+    }
+
+    @Override
+    public void notifyCreateChat(String chatName, String[] ips) {
+        //TO BE IMPLEMETED
+    }
+
+    @Override
+    public void notifyJoinChat(String ip) {
+        //NOT IMPLEMENTED
+    }
+
+    @Override
+    public void quitChat() {
+        //NOT IMPLEMENTED
+    }
+}

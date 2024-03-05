@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.TitlePageController">
+   <children>
+      <Label layoutX="228.0" layoutY="69.0" text="Group Chat Application">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Button fx:id="createChatButton" layoutX="302.0" layoutY="234.0" mnemonicParsing="false" onAction="#handleCreateChatButtonClick" prefHeight="26.0" prefWidth="295.0" text="Create Chat" />
+      <Label layoutX="337.0" layoutY="153.0" text="Your IP address is " />
+      <Label fx:id="ipAddressLabel" layoutX="449.0" layoutY="153.0" text="127.0.0.1" />
+      <Button fx:id="joinChatButton" layoutX="306.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleJoinChatButtonClick" prefHeight="26.0" prefWidth="295.0" text="Join Chat" />
+   </children>
+</AnchorPane>
