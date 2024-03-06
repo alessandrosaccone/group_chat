@@ -2,18 +2,15 @@ package org.example.demo;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import org.example.demo.frontend.controllers.TitlePageController;
-
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class GroupChatApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-page.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GroupChatApplication.class.getResource("main-page.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
         stage.setTitle("Group Chat Application");
         stage.setScene(scene);
