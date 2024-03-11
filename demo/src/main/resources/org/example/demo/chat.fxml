@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.ChatController">
+   <children>
+      <Label layoutX="491.0" layoutY="33.0" text="chat">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="226.0" layoutY="33.0" text="chat Name">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Pane layoutX="35.0" layoutY="144.0" prefHeight="427.0" prefWidth="340.0">
+         <children>
+            <Label fx:id="msg1" layoutX="135.0" layoutY="25.0" text="Message 1">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg2" layoutX="135.0" layoutY="65.0" text="Message 2">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg3" layoutX="135.0" layoutY="105.0" text="Message 3">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg4" layoutX="135.0" layoutY="145.0" text="Message 4">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg5" layoutX="135.0" layoutY="185.0" text="Message 5">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg6" layoutX="135.0" layoutY="225.0" text="Message 6">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg7" layoutX="135.0" layoutY="265.0" text="Message 7">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg8" layoutX="135.0" layoutY="305.0" text="Message 8">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg9" layoutX="135.0" layoutY="343.0" text="Message 9">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="msg10" layoutX="131.0" layoutY="385.0" text="Message 10">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label layoutX="179.0" layoutY="108.0" text="Chat">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="642.0" layoutY="108.0" text="Your Message">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="yourMessageArea" layoutX="624.0" layoutY="165.0" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="sendButton" layoutX="629.0" layoutY="386.0" mnemonicParsing="false" onAction="#handleSendButtonClick" prefHeight="26.0" prefWidth="200.0" text="Send" />
+      <Button fx:id="quitButton" layoutX="631.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleQuitButtonClick" prefHeight="26.0" prefWidth="200.0" text="Quit from this chat" />
+   </children>
+</AnchorPane>
