@@ -4,14 +4,13 @@ import org.example.demo.backend.interfaces.NetworkManager;
 
 import java.net.InetAddress;
 
-public class SingleReceiver extends Thread{
+public class ConnectionRequestor extends Thread{
 
-    SingleReceiver(InetAddress IPAddress, NetworkManager networkManager){
+    ConnectionRequestor(InetAddress nodeIP, NetworkManager networkManager){
 
     }
 
     @Override
     public void run() {
-
     }
 }
