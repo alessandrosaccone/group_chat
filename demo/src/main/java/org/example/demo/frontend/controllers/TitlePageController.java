@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import org.example.demo.backend.interfaces.NetworkManager;
 import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
 
@@ -16,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TitlePageController implements Initializable, ViewSource, ViewListener {
+public class TitlePageController extends GuiController implements Initializable, ViewSource, ViewListener {
     @FXML
     private Label ipAddressLabel;
     @FXML
@@ -72,8 +73,9 @@ public class TitlePageController implements Initializable, ViewSource, ViewListe
     }
 
     @Override
-    public void updateIp(String ip) {
-        //TO BE IMPLEMENTED
+    public void updateIp() {
+        String ipAddress = networkManager.getLocalAddress().toString();
+        ipAddressLabel.setText(ipAddress);
     }
 
     @Override
@@ -89,5 +91,10 @@ public class TitlePageController implements Initializable, ViewSource, ViewListe
     @Override
     public void quitChat() {
         //NOT IMPLEMENTED
+    }
+
+    @Override
+    public void setController(NetworkManager networkManager) {
+        this.networkManager = networkManager;
     }
 }

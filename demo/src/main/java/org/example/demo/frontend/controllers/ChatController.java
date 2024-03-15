@@ -2,12 +2,13 @@ package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.example.demo.backend.interfaces.NetworkManager;
 import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
 
 import java.util.List;
 
-public class ChatController implements ViewListener, ViewSource {
+public class ChatController extends GuiController implements ViewListener, ViewSource {
     @FXML
     private Button sendButton;
     @FXML
@@ -33,7 +34,7 @@ public class ChatController implements ViewListener, ViewSource {
     }
 
     @Override
-    public void updateIp(String ip) {
+    public void updateIp() {
         //NOT IMPLEMENTED
     }
 
@@ -50,5 +51,10 @@ public class ChatController implements ViewListener, ViewSource {
     @Override
     public void quitChat() {
         //TO BE IMPLEMENTED
+    }
+
+    @Override
+    public void setController(NetworkManager networkManager) {
+
     }
 }

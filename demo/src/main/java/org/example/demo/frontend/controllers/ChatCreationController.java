@@ -2,9 +2,10 @@ package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.example.demo.backend.interfaces.NetworkManager;
 import org.example.demo.frontend.listeners.ViewSource;
 
-public class ChatCreationController implements ViewSource {
+public class ChatCreationController extends GuiController implements ViewSource {
     @FXML
     private Button createChatButton;
     @FXML
@@ -25,5 +26,10 @@ public class ChatCreationController implements ViewSource {
     @Override
     public void quitChat() {
         //NOT IMPLEMENTED
+    }
+
+    @Override
+    public void setController(NetworkManager networkManager) {
+
     }
 }
