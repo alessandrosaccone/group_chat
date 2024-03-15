@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import org.example.demo.backend.interfaces.NetworkManager;
 import org.example.demo.frontend.listeners.ViewSource;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+
 public class ChatCreationController extends GuiController implements ViewSource {
     @FXML
     private Button createChatButton;
@@ -30,6 +33,11 @@ public class ChatCreationController extends GuiController implements ViewSource 
 
     @Override
     public void setController(NetworkManager networkManager) {
+
+    }
+
+    @Override
+    public void setAddresses(ArrayList<InetAddress> addresses) {
 
     }
 }

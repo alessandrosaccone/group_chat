@@ -36,6 +36,7 @@ public class GroupChatApplication extends Application {
             scenes.put(fxml, new Scene(fxmlLoader.load(), 900, 600));
             GuiController ctrl = fxmlLoader.getController();
             ctrl.setController(backend);
+            ctrl.setAddresses(addresses);
             guiControllers.put(fxml, ctrl);
         }
         Scene scene = scenes.get("main-page.fxml");

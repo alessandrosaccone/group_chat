@@ -2,10 +2,13 @@ package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import org.example.demo.backend.interfaces.NetworkManager;
 import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatController extends GuiController implements ViewListener, ViewSource {
@@ -14,6 +17,9 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     @FXML
     private Button quitButton;
     @FXML
+    private List<Label> messageSlots;
+
+    @FXML
     private void handleSendButtonClick() {
         System.out.println("Send button clicked!");
     }
@@ -21,6 +27,7 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     @FXML
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
+
     }
 
     @Override
@@ -56,5 +63,10 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     @Override
     public void setController(NetworkManager networkManager) {
 
+    }
+
+    @Override
+    public void setAddresses(ArrayList<InetAddress> addresses) {
+        this.addresses = addresses;
     }
 }

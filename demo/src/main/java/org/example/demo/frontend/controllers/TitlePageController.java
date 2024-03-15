@@ -13,7 +13,9 @@ import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,10 +36,11 @@ public class TitlePageController extends GuiController implements Initializable,
     private void handleCreateChatButtonClick() {
         System.out.println("Button create chat clicked!");
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/demo/chat-creation.fxml"));
+            networkManager.createNewChat(this.addresses);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/demo/chat.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            Stage newStage = new Stage();
+            Stage newStage = (Stage) ipAddressLabel.getScene().getWindow();
             newStage.setTitle("Chat Creation");
             newStage.setScene(scene);
             newStage.show();
@@ -96,5 +99,10 @@ public class TitlePageController extends GuiController implements Initializable,
     @Override
     public void setController(NetworkManager networkManager) {
         this.networkManager = networkManager;
+    }
+
+    @Override
+    public void setAddresses(ArrayList<InetAddress> addresses) {
+        this.addresses = addresses;
     }
 }

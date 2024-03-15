@@ -7,66 +7,62 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.util.ArrayList?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.ChatController">
    <children>
-      <Label layoutX="491.0" layoutY="33.0" text="chat">
-         <font>
-            <Font name="System Bold" size="40.0" />
-         </font>
-      </Label>
-      <Label layoutX="226.0" layoutY="33.0" text="chat Name">
+      <Label layoutX="92.0" layoutY="35.0" text="High Available, Casually Ordered Chat">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
       </Label>
       <Pane layoutX="35.0" layoutY="144.0" prefHeight="427.0" prefWidth="340.0">
          <children>
-            <Label fx:id="msg1" layoutX="135.0" layoutY="25.0" text="Message 1">
+            <Label fx:id="msg1" layoutX="135.0" layoutY="25.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg2" layoutX="135.0" layoutY="65.0" text="Message 2">
+            <Label fx:id="msg2" layoutX="135.0" layoutY="65.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg3" layoutX="135.0" layoutY="105.0" text="Message 3">
+            <Label fx:id="msg3" layoutX="135.0" layoutY="105.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg4" layoutX="135.0" layoutY="145.0" text="Message 4">
+            <Label fx:id="msg4" layoutX="135.0" layoutY="145.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg5" layoutX="135.0" layoutY="185.0" text="Message 5">
+            <Label fx:id="msg5" layoutX="135.0" layoutY="185.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg6" layoutX="135.0" layoutY="225.0" text="Message 6">
+            <Label fx:id="msg6" layoutX="135.0" layoutY="225.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg7" layoutX="135.0" layoutY="265.0" text="Message 7">
+            <Label fx:id="msg7" layoutX="135.0" layoutY="265.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg8" layoutX="135.0" layoutY="305.0" text="Message 8">
+            <Label fx:id="msg8" layoutX="135.0" layoutY="305.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg9" layoutX="135.0" layoutY="343.0" text="Message 9">
+            <Label fx:id="msg9" layoutX="135.0" layoutY="343.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg10" layoutX="131.0" layoutY="385.0" text="Message 10">
+            <Label fx:id="msg10" layoutX="131.0" layoutY="385.0">
                <font>
                   <Font size="15.0" />
                </font>
@@ -87,4 +83,18 @@
       <Button fx:id="sendButton" layoutX="629.0" layoutY="386.0" mnemonicParsing="false" onAction="#handleSendButtonClick" prefHeight="26.0" prefWidth="200.0" text="Send" />
       <Button fx:id="quitButton" layoutX="631.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleQuitButtonClick" prefHeight="26.0" prefWidth="200.0" text="Quit from this chat" />
    </children>
+   <fx:define>
+      <ArrayList fx:id="messageSlots">
+         <fx:reference source="msg1" />
+         <fx:reference source="msg2" />
+         <fx:reference source="msg3" />
+         <fx:reference source="msg4" />
+         <fx:reference source="msg5" />
+         <fx:reference source="msg6" />
+         <fx:reference source="msg7" />
+         <fx:reference source="msg8" />
+         <fx:reference source="msg9" />
+         <fx:reference source="msg10" />
+      </ArrayList>
+   </fx:define>
 </AnchorPane>
