@@ -6,7 +6,7 @@ import java.net.InetAddress;
 
 public class ConnectionRequestor extends Thread{
 
-    ConnectionRequestor(InetAddress nodeIP, NetworkManager networkManager){
+    ConnectionRequestor(InetAddress nodeIP, int hostPort, NetworkManager networkManager){
 
     }
 

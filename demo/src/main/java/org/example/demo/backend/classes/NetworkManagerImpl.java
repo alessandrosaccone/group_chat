@@ -21,6 +21,7 @@ public class NetworkManagerImpl implements NetworkManager {
     private final HashMap<InetAddress, Socket> sockets;
     private ServerSocket serverSocket;
     private InetAddress localAddress;
+    private final int acceptPort;
     private ConnectionAcceptor connectionAcceptor;
     private final HashMap<InetAddress,ConnectionRequestor> connectionRequestors;
     private final ArrayList<SingleReceiver> receivers;
@@ -43,6 +44,7 @@ public class NetworkManagerImpl implements NetworkManager {
         this.nodes = new ArrayList<>();
         this.nodes.addAll(nodes);
         this.sockets = new HashMap<>();
+        this.acceptPort = localPort;
         for(InetAddress node: nodes){ this.sockets.put(node,null);}
         try {
             this.serverSocket = new ServerSocket(localPort);
@@ -69,7 +71,7 @@ public class NetworkManagerImpl implements NetworkManager {
            - one SingleSender thread
          */
         for(InetAddress node: this.nodes){
-            ConnectionRequestor requestor = new ConnectionRequestor(node, this);
+            ConnectionRequestor requestor = new ConnectionRequestor(node,this.acceptPort ,this);
             this.connectionRequestors.put(node, requestor);
             requestor.start();
             SingleReceiver receiver = new SingleReceiver(node, this);
@@ -141,14 +143,14 @@ public class NetworkManagerImpl implements NetworkManager {
     public synchronized void connectionLost(InetAddress node, Socket corruptedSocket) {
         // checking if the corrupted socket has been already removed but no Requestor related to the node IP is working on
         if(this.sockets.get(node) == null && this.connectionRequestors.get(node) == null ) {
-            ConnectionRequestor requestor = new ConnectionRequestor(node, this);
+            ConnectionRequestor requestor = new ConnectionRequestor(node, this.acceptPort,this);
             this.connectionRequestors.replace(node, requestor);
             requestor.start();
         }
         // checking if it's the first time someone notify that the socket is corrupted
         else if(this.sockets.get(node)!=null && this.sockets.get(node).equals(corruptedSocket)){
             this.sockets.replace(node, null);
-            ConnectionRequestor requestor = new ConnectionRequestor(node, this);
+            ConnectionRequestor requestor = new ConnectionRequestor(node, this.acceptPort,this);
             this.connectionRequestors.replace(node, requestor);
             requestor.start();
         }
