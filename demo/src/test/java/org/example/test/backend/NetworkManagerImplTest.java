@@ -21,8 +21,8 @@ class NetworkManagerImplTest {
     private static InetAddress addr1,addr2,addr3;
     private static InetAddress local;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+     void setUp() {
         try{
             addr1 = InetAddress.getByName("192.168.10.23");
             addr2 = InetAddress.getByName("192.168.0.55");
@@ -37,8 +37,8 @@ class NetworkManagerImplTest {
         networkManager = new NetworkManagerImpl(localPort,nodes);
     }
 
-    @AfterAll
-    static void tearDown() {
+    @AfterEach
+    void tearDown() {
         networkManager.closeAllConnections();
     }
 
