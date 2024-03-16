@@ -6,9 +6,13 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 
 public abstract class GuiController {
-    NetworkManager networkManager;
+    static NetworkManager networkManager;
     ArrayList<InetAddress> addresses;
 
-    public abstract void setController(NetworkManager networkManager);
-    public abstract void setAddresses(ArrayList<InetAddress> addresses);
+    public void setController(NetworkManager manager){
+        networkManager = manager;
+    }
+    public void setAddresses(ArrayList<InetAddress> adds){
+        addresses = adds;
+    }
 }

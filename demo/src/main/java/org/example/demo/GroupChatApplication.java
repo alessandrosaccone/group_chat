@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.example.demo.backend.classes.NetworkManagerImpl;
 import org.example.demo.backend.interfaces.NetworkManager;
+import org.example.demo.frontend.controllers.ChatController;
 import org.example.demo.frontend.controllers.GuiController;
 import org.example.demo.frontend.controllers.TitlePageController;
 

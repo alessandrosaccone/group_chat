@@ -95,14 +95,4 @@ public class TitlePageController extends GuiController implements Initializable,
     public void quitChat() {
         //NOT IMPLEMENTED
     }
-
-    @Override
-    public void setController(NetworkManager networkManager) {
-        this.networkManager = networkManager;
-    }
-
-    @Override
-    public void setAddresses(ArrayList<InetAddress> addresses) {
-        this.addresses = addresses;
-    }
 }
