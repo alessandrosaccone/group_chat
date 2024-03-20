@@ -2,16 +2,67 @@ package org.example.demo.backend.classes;
 
 import org.example.demo.backend.interfaces.NetworkManager;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class SingleSender extends Thread{
+public class SingleSender extends Thread {
+    private final InetAddress ipAddress;
+    private final NetworkManager networkManager;
+    private Socket socket;
+    private DataOutputStream outputStream;
 
-    SingleSender(InetAddress IPAddress, NetworkManager networkManager){
-
+    public SingleSender(InetAddress ipAddress, NetworkManager networkManager) {
+        this.ipAddress = ipAddress;
+        this.networkManager = networkManager;
     }
 
     @Override
     public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    socket = networkManager.getSockets(ipAddress);
+                    if (socket != null) {
+                        outputStream = new DataOutputStream(socket.getOutputStream());
+                        ArrayList<Message> toBeSent = networkManager.getMessagesToBeSent(ipAddress);
+                        for (Message message : toBeSent) {
+                            outputStream.writeUTF(message.getMessage());
+                        }
+                        // Clear the list of messages after sending
+                        toBeSent.clear();
+                    } else
+                        Thread.sleep(1000);
+                    } catch (IOException e) {
+                        networkManager.connectionLost(ipAddress, socket);
+                        Thread.sleep(1000);
+                    }
+                }
+            } catch (InterruptedException e) {
+                    // Handle thread interruption
+                    System.out.println("Thread interrupted: " + e.getMessage());
+                } finally {
+                    // Clean up resources
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            // Handle or log the exception
+                        }
+                    }
+                    if (socket != null) {
+                        try {
+                            socket.close();
+                        } catch (IOException e) {
+                            // Handle or log the exception
+                        }
+                    }
+                }
+            }
+        }
 
-    }
-}
+
