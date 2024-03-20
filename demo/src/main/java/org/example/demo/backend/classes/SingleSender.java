@@ -31,7 +31,8 @@ public class SingleSender extends Thread {
                         outputStream = new DataOutputStream(socket.getOutputStream());
                         ArrayList<Message> toBeSent = networkManager.getMessagesToBeSent(ipAddress);
                         for (Message message : toBeSent) {
-                            outputStream.writeUTF(message.getMessage());
+                            String msg = parseMessage(message);
+                            outputStream.writeUTF(msg);
                         }
                         // Clear the list of messages after sending
                         toBeSent.clear();
@@ -63,6 +64,16 @@ public class SingleSender extends Thread {
                     }
                 }
             }
-        }
+
+    private String parseMessage(Message message) {
+        String res = "";
+        res += message.getSenderIP() + "|";
+        res += message.getChatID() + "|";
+        res += message.getMessage() + "|";
+        res += message.getMessageType() + "|";
+        res += message.getVectorClock().get(message.getSenderIP());
+        return res;
+    }
+}
 
 
