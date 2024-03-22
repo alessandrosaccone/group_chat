@@ -53,8 +53,8 @@ public interface NetworkManager {
     void setMessageToBeSent(String chatID, String text, MessageType type);
 
     // this method MUST be invoked by the application level when creating a new chat. It starts the execution of the
-    // agreement protocol for the unique global ID of the chat
-    void createNewChat(ArrayList<InetAddress> participants);
+    // agreement protocol for the unique global ID of the chat. It returns the String reporting the chatID of the new chat
+    String createNewChat(ArrayList<InetAddress> participants);
 
     // this method is invoked only by the application level when deleting a chat. It starts the protocol for notifying
     // the others node that the chat has been deleted

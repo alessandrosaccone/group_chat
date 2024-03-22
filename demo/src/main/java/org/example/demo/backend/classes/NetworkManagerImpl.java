@@ -212,11 +212,14 @@ public class NetworkManagerImpl implements NetworkManager {
             toBeShown = new ArrayList<>(this.chatMessagesToBeShown.get(chatID));
             this.chatMessagesToBeShown.replace(chatID, new ArrayList<>());
         }
-        // checking if the chat has been deleted
-        if(this.chats.containsKey(chatID)){
+        // checking if the chat has been just created (REDUNDANT --> it should never happen)
+        if(this.chats.containsKey(chatID) && !this.chatMessagesToBeShown.containsKey(chatID)){
             this.chatMessagesToBeShown.replace(chatID, new ArrayList<>());
         }
-        else { this.chatMessagesToBeShown.remove(chatID);}
+        // checking if the chat has been deleted
+        if (!this.chats.containsKey(chatID)) {
+            this.chatMessagesToBeShown.remove(chatID);
+        }
         return toBeShown;
     }
 
@@ -250,7 +253,7 @@ public class NetworkManagerImpl implements NetworkManager {
     /* when invoked, this method start the procedure for the creation of a new chat. It calculates a possible global
         unique ID and sent it to all the nodes participating in the new chat.
      */
-    public synchronized void createNewChat(ArrayList<InetAddress> participants){
+    public synchronized String createNewChat(ArrayList<InetAddress> participants){
         // since this method can be invoked only by the application level, I need to add the local address to the
         // list of participants
         ArrayList<InetAddress> participantsComplete = new ArrayList<>(participants);
@@ -269,6 +272,7 @@ public class NetworkManagerImpl implements NetworkManager {
         this.chatMessageWaiting.put(uniqueID, new ArrayList<>());
         // sending the creation message (with the set of participants) to all the participants
         this.setMessageToBeSent(uniqueID, participantsComplete.toString(),MessageType.CREATION_REQUEST);
+        return uniqueID;
     }
 
     @Override
@@ -382,13 +386,11 @@ public class NetworkManagerImpl implements NetworkManager {
                         this.IDProposal.remove(chatID);
                     }
                     this.chats.remove(chatID);
-                    this.chatMessagesToBeShown.remove(chatID);
                     this.chatMessageWaiting.remove(chatID);
                 }
                 case DELETION_ORDER -> {
                     this.IDProposal.remove(chatID); // the remove do NOT raise exception if the entry do not exist
                     this.chats.remove(chatID);
-                    this.chatMessagesToBeShown.remove(chatID);
                     this.chatMessageWaiting.remove(chatID);
                 }
                 case TEXT_MESSAGE -> {
