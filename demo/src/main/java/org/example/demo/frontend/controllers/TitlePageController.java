@@ -8,12 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import org.example.demo.backend.interfaces.NetworkManager;
+import org.example.demo.GroupChatApplication;
+import org.example.demo.backend.classes.Message;
 import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,14 @@ public class TitlePageController extends GuiController implements Initializable,
     private void handleCreateChatButtonClick() {
         System.out.println("Button create chat clicked!");
         try {
-            networkManager.createNewChat(this.addresses);
+            GroupChatApplication.setChatId(
+                    GroupChatApplication.getBackend().createNewChat(GroupChatApplication.getAddresses()));
+            System.out.println("Chat " + GroupChatApplication.getChatId() + " creation");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/demo/chat.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage newStage = (Stage) ipAddressLabel.getScene().getWindow();
-            newStage.setTitle("Chat Creation");
+            newStage.setTitle("High Available Group Chat Application");
             newStage.setScene(scene);
             newStage.show();
         } catch (IOException e) {
@@ -66,7 +68,7 @@ public class TitlePageController extends GuiController implements Initializable,
     }
 
     @Override
-    public void updateCurrentChat(List<String> messages) {
+    public void updateCurrentChat(List<Message> messages) {
         //NOT IMPLEMENTED
     }
 
@@ -77,7 +79,7 @@ public class TitlePageController extends GuiController implements Initializable,
 
     @Override
     public void updateIp() {
-        String ipAddress = networkManager.getLocalAddress().toString();
+        String ipAddress = GroupChatApplication.getBackend().getLocalAddress().toString();
         ipAddressLabel.setText(ipAddress);
     }
 
@@ -95,4 +97,5 @@ public class TitlePageController extends GuiController implements Initializable,
     public void quitChat() {
         //NOT IMPLEMENTED
     }
+
 }

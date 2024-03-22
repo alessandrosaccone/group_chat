@@ -8,4 +8,5 @@ module org.example.demo {
     exports org.example.demo;
     exports org.example.demo.frontend.controllers;
     exports org.example.demo.backend.interfaces;
+    exports org.example.demo.backend.classes;
 }

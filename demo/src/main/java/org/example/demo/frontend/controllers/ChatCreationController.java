@@ -31,13 +31,4 @@ public class ChatCreationController extends GuiController implements ViewSource 
         //NOT IMPLEMENTED
     }
 
-    @Override
-    public void setController(NetworkManager networkManager) {
-
-    }
-
-    @Override
-    public void setAddresses(ArrayList<InetAddress> addresses) {
-
-    }
 }

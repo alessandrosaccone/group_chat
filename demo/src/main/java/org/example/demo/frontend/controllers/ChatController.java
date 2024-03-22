@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import org.example.demo.GroupChatApplication;
+import org.example.demo.backend.classes.Message;
 import org.example.demo.backend.enums.MessageType;
 import org.example.demo.frontend.listeners.ViewListener;
 import org.example.demo.frontend.listeners.ViewSource;
@@ -33,7 +35,8 @@ public class ChatController extends GuiController implements ViewListener, ViewS
         System.out.println(message);
         yourMessageArea.setText("");
         displayMessages(message);
-        networkManager.setMessageToBeSent("alpha", message, MessageType.TEXT_MESSAGE);
+        GroupChatApplication.getBackend().setMessageToBeSent(
+                GroupChatApplication.getChatId(), message, MessageType.TEXT_MESSAGE);
     }
 
     @FXML
@@ -43,8 +46,10 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     }
 
     @Override
-    public void updateCurrentChat(List<String> messages) {
-        //TO BE IMPLEMENTED
+    public void updateCurrentChat(List<Message> messages) {
+        for(Message m : messages){
+            displayMessages(m.getSenderIP().toString() + " : " + m.getMessage());
+        }
     }
 
     @Override
