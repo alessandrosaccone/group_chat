@@ -21,31 +21,38 @@ public class SingleReceiver extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                Socket socket = networkManager.getSockets(ipAddress);
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    Socket socket = networkManager.getSockets(ipAddress);
 
-                if (socket == null) {
-                    Thread.sleep(1000); // wait for 1 second before retrying
-                    continue;
+                    if (socket == null) {
+                        Thread.sleep(1000); // wait for 1 second before retrying
+                        continue;
+                    }
+
+                    DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+
+                    while (!Thread.currentThread().isInterrupted()) {
+                        String messageString = inputStream.readUTF();
+
+                        Message message = parseMessage(messageString);
+
+                        networkManager.newMessageReceived(message);
+                    }
+                } catch (EOFException e) {
+                    networkManager.connectionLost(ipAddress, null);
+                } catch (IOException e) {
+                    e.printStackTrace(); // Generic handling
                 }
-
-                DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-
-                while (true) {
-                    String messageString = inputStream.readUTF();
-
-                    Message message = parseMessage(messageString);
-
-                    networkManager.newMessageReceived(message);
-                }
-            } catch (EOFException e) {
-                networkManager.connectionLost(ipAddress, null);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace(); // Generic handling
             }
+        } catch (InterruptedException e) {
+            System.out.println("Thread interrupted: " + e.getMessage());
+            e.printStackTrace(); // Generic handling
+            //Thread.currentThread().interrupt(); // Preserve the interruption status
         }
     }
+
 
     private Message parseMessage(String messageString) {
 

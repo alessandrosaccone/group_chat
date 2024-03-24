@@ -44,22 +44,22 @@ public class SingleSender extends Thread {
                     }
                 }
             } catch (InterruptedException e) {
-                    // Handle thread interruption
-                    System.out.println("Thread interrupted: " + e.getMessage());
+                // Handle thread interruption
+                System.out.println("Thread interrupted: " + e.getMessage());
                 } finally {
                     // Clean up resources
                     if (outputStream != null) {
                         try {
                             outputStream.close();
                         } catch (IOException e) {
-                            // Handle or log the exception
+                            System.out.println("Error closing the outputStream");
                         }
                     }
                     if (socket != null) {
                         try {
                             socket.close();
                         } catch (IOException e) {
-                            // Handle or log the exception
+                            // Handle the exception
                         }
                     }
                 }
