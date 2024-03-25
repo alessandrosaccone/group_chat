@@ -16,6 +16,7 @@ public class ConnectionAcceptor extends Thread{
 
     @Override
     public void run() {
+        // dummy condition
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 //serverSocket.setSoTimeout(0);

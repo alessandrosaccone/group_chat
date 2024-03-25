@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class SingleSender extends Thread {
     private final InetAddress ipAddress;
@@ -19,51 +17,44 @@ public class SingleSender extends Thread {
     public SingleSender(InetAddress ipAddress, NetworkManager networkManager) {
         this.ipAddress = ipAddress;
         this.networkManager = networkManager;
+        socket = networkManager.getSockets(ipAddress);
     }
 
     @Override
     public void run() {
         try {
+            // dummy condition (always true)
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    socket = networkManager.getSockets(ipAddress);
-                    if (socket != null) {
-                        outputStream = new DataOutputStream(socket.getOutputStream());
-                        ArrayList<Message> toBeSent = networkManager.getMessagesToBeSent(ipAddress);
-                        for (Message message : toBeSent) {
-                            String msg = parseMessage(message);
-                            outputStream.writeUTF(msg);
-                        }
-                        // Clear the list of messages after sending
-                        toBeSent.clear();
-                    } else
+                    // trying to retrieve a new connection if the old one has been lost
+                    while(socket==null){
                         Thread.sleep(1000);
-                    } catch (IOException e) {
-                        networkManager.connectionLost(ipAddress, socket);
-                        Thread.sleep(1000);
+                        socket = networkManager.getSockets(ipAddress);
                     }
-                }
-            } catch (InterruptedException e) {
-                // Handle thread interruption
-                System.out.println("Thread interrupted: " + e.getMessage());
-                } finally {
-                    // Clean up resources
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (IOException e) {
-                            System.out.println("Error closing the outputStream");
-                        }
+
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                    ArrayList<Message> toBeSent = networkManager.getMessagesToBeSent(ipAddress);
+                    for (Message message : toBeSent) {
+                        String msg = parseMessage(message);
+                        outputStream.writeUTF(msg);
                     }
-                    if (socket != null) {
-                        try {
-                            socket.close();
-                        } catch (IOException e) {
-                            // Handle the exception
-                        }
-                    }
+                    // Clear the list of messages after sending
+                    toBeSent.clear();
+
+                } catch (IOException e) {
+                    networkManager.connectionLost(ipAddress, socket);
+                } catch (InterruptedException e) {
+                    // Handle thread interruption
+                    System.out.println("Thread interrupted: " + e.getMessage());
                 }
             }
+        } finally {
+            // Clean up resources (just the outputStream. Socket will be closed by the NetworkManager)
+            if (outputStream != null) {
+                try { outputStream.close(); } catch (IOException e) { System.out.println("Error closing the outputStream"); }
+            }
+        }
+    }
 
     private String parseMessage(Message message) {
         String res = "";

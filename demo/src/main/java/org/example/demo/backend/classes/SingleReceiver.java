@@ -1,7 +1,6 @@
 package org.example.demo.backend.classes;
 
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -13,25 +12,28 @@ import org.example.demo.backend.enums.MessageType;
 public class SingleReceiver extends Thread {
     private final InetAddress ipAddress;
     private final NetworkManagerImpl networkManager;
+    private DataInputStream inputStream;
+    private Socket socket;
 
     public SingleReceiver(InetAddress ipAddress, NetworkManagerImpl networkManager) {
         this.ipAddress = ipAddress;
         this.networkManager = networkManager;
+        socket = networkManager.getSockets(ipAddress);
     }
 
     @Override
     public void run() {
-        try {
+        try{
+            // dummy condition (always true)
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    Socket socket = networkManager.getSockets(ipAddress);
-
-                    if (socket == null) {
-                        Thread.sleep(1000); // wait for 1 second before retrying
-                        continue;
+                    // trying to retrieve a new connection if the old one has been lost
+                    while (socket == null) {
+                        Thread.sleep(1000); // waiting for 1 second before retrying
+                        socket = networkManager.getSockets(ipAddress);
                     }
 
-                    DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+                    inputStream = new DataInputStream(socket.getInputStream());
 
                     while (!Thread.currentThread().isInterrupted()) {
                         String messageString = inputStream.readUTF();
@@ -40,16 +42,20 @@ public class SingleReceiver extends Thread {
 
                         networkManager.newMessageReceived(message);
                     }
-                } catch (EOFException e) {
-                    networkManager.connectionLost(ipAddress, null);
                 } catch (IOException e) {
+                    // notifying the NetworkManager that the connection has been probably lost
+                    networkManager.connectionLost(ipAddress, socket);
+                    socket = null;
+                }catch (InterruptedException e) {
+                    System.out.println("Thread interrupted: " + e.getMessage());
                     e.printStackTrace(); // Generic handling
                 }
             }
-        } catch (InterruptedException e) {
-            System.out.println("Thread interrupted: " + e.getMessage());
-            e.printStackTrace(); // Generic handling
-            //Thread.currentThread().interrupt(); // Preserve the interruption status
+        } finally{
+            // Clean up resources (just the outputStream. Socket will be closed by the NetworkManager)
+            if (inputStream != null) {
+                try { inputStream.close(); } catch (IOException e) { System.out.println("Error closing the inputStream"); }
+            }
         }
     }
 

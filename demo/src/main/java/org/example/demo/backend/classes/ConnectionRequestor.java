@@ -5,6 +5,7 @@ import org.example.demo.backend.interfaces.NetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
 
 public class ConnectionRequestor extends Thread {
     private final InetAddress nodeIP;
@@ -21,17 +22,20 @@ public class ConnectionRequestor extends Thread {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
+                // randomized time for repeating the request
+                Random random = new Random(System.currentTimeMillis());
+                Thread.sleep(Math.abs(random.nextLong()%1000));
+                // trying to connect to nodeIP:hostPort
                 Socket socket = new Socket(nodeIP, hostPort);
+                // connection established: the NetworkManager is notified that the task has been completed
                 networkManager.setNewConnection(nodeIP, socket);
                 networkManager.RequestorTerminated(nodeIP);
                 return;
+
             } catch (IOException e) {
-                System.err.println("Errore durante la connessione al nodo " + nodeIP + ":" + hostPort);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                System.err.println("Error while trying to connect to " + nodeIP + ":" + hostPort);
+            } catch (InterruptedException ex) {
+                //throw new RuntimeException(ex);
             }
         }
     }
