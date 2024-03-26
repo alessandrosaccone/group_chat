@@ -243,6 +243,10 @@ public class NetworkManagerImpl implements NetworkManager {
                     this.messagesToBeSent.replace(node, newMessages);
                 }
             }
+            // adding the message on the local queue of the messages to be shown
+            ArrayList<Message> newMessagesLocal = new ArrayList<>(this.chatMessagesToBeShown.get(chatID));
+            newMessagesLocal.add(message);
+            this.chatMessagesToBeShown.replace(chatID, newMessagesLocal);
         }
         // TODO: implement with exception
         // Until now, if the chat do not exists, the message is simply not sent
@@ -389,7 +393,7 @@ public class NetworkManagerImpl implements NetworkManager {
                     this.chatMessageWaiting.remove(chatID);
                 }
                 case DELETION_ORDER -> {
-                    this.IDProposal.remove(chatID); // the remove do NOT raise exception if the entry do not exist
+                    this.IDProposal.remove(chatID); // the remove do NOT raise exception if the entry doesn't exist
                     this.chats.remove(chatID);
                     this.chatMessageWaiting.remove(chatID);
                 }

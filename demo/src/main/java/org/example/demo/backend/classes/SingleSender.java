@@ -43,6 +43,7 @@ public class SingleSender extends Thread {
 
                 } catch (IOException e) {
                     networkManager.connectionLost(ipAddress, socket);
+                    socket = null;
                 } catch (InterruptedException e) {
                     // Handle thread interruption
                     System.out.println("Thread interrupted: " + e.getMessage());
