@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface ViewListener {
     void updateCurrentChat(List<Message> messages);
-    void updateChatName(String chatName);
-    void updateIp();
+    void updateInfo();
 }

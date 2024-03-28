@@ -69,7 +69,7 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="179.0" layoutY="108.0" text="Chat">
+      <Label layoutX="153.0" layoutY="108.0" text="Chat">
          <font>
             <Font size="25.0" />
          </font>
@@ -82,6 +82,12 @@
       <TextArea fx:id="yourMessageArea" layoutX="624.0" layoutY="165.0" prefHeight="200.0" prefWidth="200.0" />
       <Button fx:id="sendButton" layoutX="629.0" layoutY="386.0" mnemonicParsing="false" onAction="#handleSendButtonClick" prefHeight="26.0" prefWidth="200.0" text="Send" />
       <Button fx:id="quitButton" layoutX="631.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleQuitButtonClick" prefHeight="26.0" prefWidth="200.0" text="Quit from this chat" />
+      <Label fx:id="chatIdLabel" layoutX="239.0" layoutY="108.0" text="Chat">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="rejoinButton" layoutX="629.0" layoutY="506.0" mnemonicParsing="false" onAction="#handleRejoinButtonClick" prefHeight="26.0" prefWidth="200.0" text="Rejoin chat" />
    </children>
    <fx:define>
       <ArrayList fx:id="messageSlots">

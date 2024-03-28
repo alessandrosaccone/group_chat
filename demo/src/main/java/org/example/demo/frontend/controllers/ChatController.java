@@ -1,22 +1,18 @@
 package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.backend.enums.MessageType;
 import org.example.demo.frontend.listeners.ViewListener;
-import org.example.demo.frontend.listeners.ViewSource;
 
 import java.util.List;
 
-public class ChatController extends GuiController implements ViewListener, ViewSource {
+public class ChatController extends GuiController implements ViewListener {
     @FXML
-    private Button sendButton;
-    @FXML
-    private Button quitButton;
+    private Label chatIdLabel;
     @FXML
     private List<Label> messageSlots;
     @FXML
@@ -32,9 +28,8 @@ public class ChatController extends GuiController implements ViewListener, ViewS
                     "PLEASE, WRITE SOMETHING HERE!");
             return;
         }
-        System.out.println(message);
+        System.out.println("Message <<" + message + ">> to be send. Juxtaposed to the sending queue");
         yourMessageArea.setText("");
-        displayMessages(message);
         GroupChatApplication.getBackend().setMessageToBeSent(
                 GroupChatApplication.getChatId(), message, MessageType.TEXT_MESSAGE);
     }
@@ -42,7 +37,14 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     @FXML
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
+        GroupChatApplication.getBackend().deleteChat(GroupChatApplication.getChatId());
+        yourMessageArea.setText("You successfully left the chat!");
+    }
 
+    @FXML
+    private void handleRejoinButtonClick(){
+        System.out.println("Rejoining...");
+        yourMessageArea.setText("You successfully rejoined the chat!!");
     }
 
     @Override
@@ -53,28 +55,8 @@ public class ChatController extends GuiController implements ViewListener, ViewS
     }
 
     @Override
-    public void updateChatName(String chatName) {
-        //TO BE IMPLEMENTED
-    }
-
-    @Override
-    public void updateIp() {
+    public void updateInfo() {
         //NOT IMPLEMENTED
-    }
-
-    @Override
-    public void notifyCreateChat(String chatName, String[] ips) {
-        //NOT IMPLEMENTED
-    }
-
-    @Override
-    public void notifyJoinChat(String ip) {
-        //NOT IMPLEMENTED
-    }
-
-    @Override
-    public void quitChat() {
-        //TO BE IMPLEMENTED
     }
 
     private void displayMessages(String message){
@@ -85,5 +67,9 @@ public class ChatController extends GuiController implements ViewListener, ViewS
 
         for(int i=0;i<messagesList.length; i++)
             messageSlots.get(i).setText(messagesList[i]);
+    }
+
+    public void setUpChat(){
+        chatIdLabel.setText(GroupChatApplication.getChatId());
     }
 }
