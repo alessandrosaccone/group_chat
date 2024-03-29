@@ -1,5 +1,6 @@
 package org.example.demo;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,10 +15,10 @@ import org.example.demo.frontend.controllers.GuiController;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.attribute.GroupPrincipal;
 import java.util.*;
 
 public class App {
-    private static NetworkManager networkManager;
     private final static ArrayList<InetAddress> addresses = new ArrayList<>();
     private static String chatId;
 
@@ -38,8 +39,8 @@ public class App {
             @Override
             public void handle(WindowEvent windowEvent) {
                 System.out.println("Closing the chat whose id is " + App.getChatId());
-                App.getBackend().deleteChat(App.getChatId());
-                App.getBackend().closeAllConnections();
+                GroupChatApplication.getBackend().deleteChat(App.getChatId());
+                GroupChatApplication.getBackend().closeAllConnections();
                 System.out.println("CHAT CLOSED!!");
             }
         });
@@ -48,24 +49,19 @@ public class App {
         stage.show();
     }
 
-    public static void runApplication() {
-        App.setNetworkManager(new NetworkManagerImpl(1234,
-                App.getAddresses()));
-        chatId = getBackend().createNewChat(getAddresses());
+    public static void runApplication(Stage stage) {
+        try {
+            setupApplication(stage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        chatId = GroupChatApplication.getBackend().createNewChat(App.getAddresses());
         System.out.println("Chat " + chatId + " creation");
         addListener((ChatController) guiControllers.get("chat.fxml"));
     }
 
-    private static void setNetworkManager(NetworkManager networkManager) {
-        App.networkManager = networkManager;
-    }
-
     public static ArrayList<InetAddress> getAddresses() {
         return App.addresses;
-    }
-
-    public static NetworkManager getBackend() {
-        return App.networkManager;
     }
 
     public static String getChatId() {
@@ -78,13 +74,13 @@ public class App {
                     + App.getChatId() + "!!");
             ArrayList<Message> messages;
             while(true){
-                messages = App.getBackend().getMessagesToBeShown(
+                messages = GroupChatApplication.getBackend().getMessagesToBeShown(
                         App.getChatId()
                 );
                 if(messages.size() > 0){
                     System.out.println("Messages received on chat " + App.getChatId());
-                    controller.updateCurrentChat(messages);
-                    break;
+                    ArrayList<Message> finalMessages = messages;
+                    Platform.runLater(() -> controller.updateCurrentChat(finalMessages));
                 }
             }
         }).start();

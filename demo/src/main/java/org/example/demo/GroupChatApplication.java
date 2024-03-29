@@ -19,15 +19,10 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class GroupChatApplication extends Application {
-
     private static NetworkManager networkManager;
     private final static ArrayList<InetAddress> addresses = new ArrayList<>();
-    private static String chatId;
-
-    static List<String> fxmls = new ArrayList<>(Arrays.asList("main-page.fxml", "chat.fxml"));
-
+    static String fxml = "main-page.fxml";
     static Map<String, Scene> scenes = new HashMap<String, Scene>();
-
     private static final Map<String, GuiController> guiControllers = new HashMap<String, GuiController>();
 
     @Override
@@ -36,12 +31,10 @@ public class GroupChatApplication extends Application {
     }
 
     private static void setupApplication(Stage stage) throws IOException {
-        for(String fxml : fxmls){
-            FXMLLoader fxmlLoader = new FXMLLoader(GroupChatApplication.class.getResource(fxml));
-            scenes.put(fxml, new Scene(fxmlLoader.load(), 900, 600));
-            GuiController ctrl = fxmlLoader.getController();
-            GroupChatApplication.guiControllers.put(fxml, ctrl);
-        }
+        FXMLLoader fxmlLoader = new FXMLLoader(GroupChatApplication.class.getResource(fxml));
+        scenes.put(fxml, new Scene(fxmlLoader.load(), 900, 600));
+        GuiController ctrl = fxmlLoader.getController();
+        GroupChatApplication.guiControllers.put(fxml, ctrl);
         Scene scene = scenes.get("main-page.fxml");
         stage.setTitle("High Available Group Chat Application");
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -55,15 +48,12 @@ public class GroupChatApplication extends Application {
         stage.setScene(scene);
         ((TitlePageController) GroupChatApplication.guiControllers.get("main-page.fxml")).updateInfo();
         stage.show();
-        scenes.replace("main-page.fxml", scene);
     }
 
-    public static void runApplication() {
+    public static void runApplication(Stage stage) {
         GroupChatApplication.setNetworkManager(new NetworkManagerImpl(1234,
                 GroupChatApplication.getAddresses()));
-        chatId = getBackend().createNewChat(getAddresses());
-        System.out.println("Chat " + chatId + " creation");
-        addListener((ChatController) guiControllers.get("chat.fxml"));
+        App.runApplication(stage);
     }
 
     public static void main(String[] args) {
@@ -80,28 +70,6 @@ public class GroupChatApplication extends Application {
 
     public static NetworkManager getBackend() {
         return GroupChatApplication.networkManager;
-    }
-
-    public static String getChatId() {
-        return GroupChatApplication.chatId;
-    }
-
-    private static void addListener(ChatController controller){
-        new Thread(() -> {
-            System.out.println("Listener to the receiving queue initialized for chat "
-                    + GroupChatApplication.getChatId() + "!!");
-            ArrayList<Message> messages;
-            while(true){
-                messages = GroupChatApplication.getBackend().getMessagesToBeShown(
-                        GroupChatApplication.getChatId()
-                );
-                if(messages.size() > 0){
-                    System.out.println("Messages received on chat " + GroupChatApplication.getChatId());
-                    controller.updateCurrentChat(messages);
-                    break;
-                }
-            }
-        }).start();
     }
 
     public static void addHostAddress(String ipAddress){

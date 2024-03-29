@@ -7,49 +7,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import java.util.ArrayList?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.TitlePageController">
-   <children>
-      <Label layoutX="228.0" layoutY="69.0" text="Group Chat Application">
-         <font>
-            <Font name="System Bold" size="40.0" />
-         </font>
-      </Label>
-      <Button fx:id="createChatButton" layoutX="302.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleCreateChatButtonClick" prefHeight="26.0" prefWidth="295.0" text="Create Chat" />
-      <ChoiceBox fx:id="numUserChoice" layoutX="450.0" layoutY="163.0" prefHeight="26.0" prefWidth="47.0" />
-      <Label layoutX="333.0" layoutY="168.0" text="Select the chat size" />
-      <Label layoutX="341.0" layoutY="204.0" text="Insert user adress" />
-      <TextField fx:id="addressIp" layoutX="447.0" layoutY="200.0" />
-      <Button fx:id="addHostButton" layoutX="617.0" layoutY="200.0" mnemonicParsing="false" onAction="#addHostButtonClick" text="Add" />
-      <Label layoutX="401.0" layoutY="136.0" text="Partecipants" />
-      <Label fx:id="numOfPartecipants" layoutX="482.0" layoutY="136.0" text="1" />
-      <Label layoutX="398.0" layoutY="291.0" text="Others partecipants" />
-      <Label fx:id="host1" layoutX="166.0" layoutY="350.0" text="255.255.255.255" />
-      <Label fx:id="host2" layoutX="290.0" layoutY="350.0" text="255.255.255.255" />
-      <Label fx:id="host3" layoutX="404.0" layoutY="350.0" text="255.255.255.255" />
-      <Label fx:id="host4" layoutX="522.0" layoutY="350.0" text="255.255.255.255" />
-      <Label fx:id="host5" layoutX="642.0" layoutY="350.0" text="255.255.255.255" />
-      <Label fx:id="host6" layoutX="228.0" layoutY="404.0" text="255.255.255.255" />
-      <Label fx:id="host7" layoutX="344.0" layoutY="404.0" text="255.255.255.255" />
-      <Label fx:id="host8" layoutX="459.0" layoutY="404.0" text="255.255.255.255" />
-      <Label fx:id="host9" layoutX="574.0" layoutY="404.0" text="255.255.255.255" />
-      <Label fx:id="advLabel" layoutX="531.0" layoutY="168.0" textFill="#f40606">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-   </children>
-   <fx:define>
-      <ArrayList fx:id="hostsLabels">
-         <fx:reference source="host1" />
-         <fx:reference source="host2" />
-         <fx:reference source="host3" />
-         <fx:reference source="host4" />
-         <fx:reference source="host5" />
-         <fx:reference source="host6" />
-         <fx:reference source="host7" />
-         <fx:reference source="host8" />
-         <fx:reference source="host9" />
-      </ArrayList>
-   </fx:define>
+    <children>
+        <Label layoutX="228.0" layoutY="69.0" text="Group Chat Application">
+            <font>
+                <Font name="System Bold" size="40.0" />
+            </font>
+        </Label>
+        <Button fx:id="createChatButton" layoutX="325.0" layoutY="427.0" mnemonicParsing="false" onAction="#handleCreateChatButtonClick" prefHeight="26.0" prefWidth="334.0" text="Create Chat" />
+        <ChoiceBox fx:id="numUserChoice" layoutX="463.0" layoutY="242.0" prefHeight="26.0" prefWidth="47.0" />
+        <Label layoutX="324.0" layoutY="247.0" text="Select the chat size" />
+        <Label layoutX="324.0" layoutY="159.0" text="Insert user adress" />
+        <TextField fx:id="addressIp" layoutX="447.0" layoutY="155.0" />
+        <Button fx:id="addHostButton" layoutX="617.0" layoutY="155.0" mnemonicParsing="false" onAction="#addHostButtonClick" text="Add" />
+        <Label layoutX="325.0" layoutY="350.0" text="Other partecipants list" />
+        <Label fx:id="numOfPartecipants" layoutX="463.0" layoutY="350.0" text="1" />
+        <Label layoutX="325.0" layoutY="316.0" text="Set of addresses " />
+        <Label fx:id="advLabel" layoutX="271.0" layoutY="390.0" prefHeight="18.0" prefWidth="392.0" textFill="#f40606">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label layoutX="312.0" layoutY="132.0" text="Populatation of the set of users addresses">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <ChoiceBox fx:id="setAddressesBox" layoutX="463.0" layoutY="312.0" prefWidth="150.0" />
+        <Label layoutX="314.0" layoutY="222.0" text="Chat room creation section">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <ChoiceBox fx:id="currentPartecipantsBox" layoutX="506.0" layoutY="346.0" prefWidth="150.0" />
+        <Label layoutX="324.0" layoutY="276.0" text="Select a user to be added to the current chat room" />
+      <Button fx:id="selectPartecipantButton" layoutX="645.0" layoutY="312.0" mnemonicParsing="false" onAction="#handleSelectPartecipantButtonClick" text="Select partecipant" />
+      <Button layoutX="323.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleConfirmCurrentSetClick" prefHeight="26.0" prefWidth="333.0" text="Confirm actual set of available addresses" />
+    </children>
 </AnchorPane>

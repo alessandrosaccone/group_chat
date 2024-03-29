@@ -3,6 +3,7 @@ package org.example.demo.frontend.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import org.example.demo.App;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.backend.enums.MessageType;
@@ -31,13 +32,13 @@ public class ChatController extends GuiController implements ViewListener {
         System.out.println("Message <<" + message + ">> to be send. Juxtaposed to the sending queue");
         yourMessageArea.setText("");
         GroupChatApplication.getBackend().setMessageToBeSent(
-                GroupChatApplication.getChatId(), message, MessageType.TEXT_MESSAGE);
+                App.getChatId(), message, MessageType.TEXT_MESSAGE);
     }
 
     @FXML
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
-        GroupChatApplication.getBackend().deleteChat(GroupChatApplication.getChatId());
+        GroupChatApplication.getBackend().deleteChat(App.getChatId());
         yourMessageArea.setText("You successfully left the chat!");
     }
 
@@ -50,7 +51,14 @@ public class ChatController extends GuiController implements ViewListener {
     @Override
     public void updateCurrentChat(List<Message> messages) {
         for(Message m : messages){
-            displayMessages(m.getSenderIP().toString() + " : " + m.getMessage());
+            if(m.getMessageType() == MessageType.TEXT_MESSAGE){
+                String sender;
+                if(m.getSenderIP().equals(GroupChatApplication.getBackend().getLocalAddress()))
+                    sender = "you";
+                else sender = m.getSenderIP().toString();
+                displayMessages(sender + " : " + m.getMessage());
+            }
+
         }
     }
 
@@ -70,6 +78,6 @@ public class ChatController extends GuiController implements ViewListener {
     }
 
     public void setUpChat(){
-        chatIdLabel.setText(GroupChatApplication.getChatId());
+        chatIdLabel.setText(App.getChatId());
     }
 }
