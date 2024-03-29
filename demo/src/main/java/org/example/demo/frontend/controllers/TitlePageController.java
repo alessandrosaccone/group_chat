@@ -1,24 +1,16 @@
 package org.example.demo.frontend.controllers;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.example.demo.App;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.frontend.listeners.ViewListener;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,30 +42,7 @@ public class TitlePageController extends GuiController implements Initializable,
     @FXML
     private void handleCreateChatButtonClick() {
         System.out.println("Button create chat clicked!");
-        //try {
-            GroupChatApplication.runApplication(new Stage());
-            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/demo/chat.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage newStage = new Stage();
-            newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    System.out.println("Closing the chat whose id is " + App.getChatId());
-                    GroupChatApplication.getBackend().deleteChat(App.getChatId());
-                    GroupChatApplication.getBackend().closeAllConnections();
-                    System.out.println("CHAT CLOSED!!");
-                }
-            });
-            newStage.setTitle("High Available Group Chat Application");
-            newStage.setScene(scene);
-            ((ChatController) loader.getController()).setUpChat();
-            newStage.show();
-            cleanSetup();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+        GroupChatApplication.runApplication(new Stage());
         cleanSetup();
     }
 
@@ -126,7 +95,6 @@ public class TitlePageController extends GuiController implements Initializable,
         addressIp.setText("");
         numberOfUsers = 0;
         numOfPartecipants.setText("1");
-        setAddressesBox.getItems().clear();
         currentPartecipantsBox.getItems().clear();
     }
 
@@ -147,10 +115,6 @@ public class TitlePageController extends GuiController implements Initializable,
 
     @FXML
     private void addHostButtonClick(){
-        /*if(numberOfUsers == 0 || (App.getAddresses().size() == numberOfUsers - 1)){
-            advLabel.setText("The number of users is zero or the max has been reached!");
-            return;
-        }*/
          String address = addressIp.getText();
          if(address.equals(""))
              advLabel.setText("Please, insert an address!!");
@@ -159,7 +123,6 @@ public class TitlePageController extends GuiController implements Initializable,
              System.out.println("Users whose address is " + address + " added to the set of users");
              addressIp.setText("");
              setAddressesBox.getItems().add(address);
-             //numOfPartecipants.setText(Integer.toString(GroupChatApplication.getAddresses().size() + 1));
              advLabel.setText("");
          }
     }

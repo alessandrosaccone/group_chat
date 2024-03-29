@@ -3,7 +3,6 @@ package org.example.demo.frontend.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import org.example.demo.App;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.backend.enums.MessageType;
@@ -18,7 +17,10 @@ public class ChatController extends GuiController implements ViewListener {
     private List<Label> messageSlots;
     @FXML
     private TextArea yourMessageArea;
+    @FXML
+    private Label warningLabel;
     private final String[] messagesList = {"", "", "", "", "", "", "", "", "", ""};
+    private String thisChatId;
 
     @FXML
     private void handleSendButtonClick() {
@@ -32,14 +34,14 @@ public class ChatController extends GuiController implements ViewListener {
         System.out.println("Message <<" + message + ">> to be send. Juxtaposed to the sending queue");
         yourMessageArea.setText("");
         GroupChatApplication.getBackend().setMessageToBeSent(
-                App.getChatId(), message, MessageType.TEXT_MESSAGE);
+                thisChatId, message, MessageType.TEXT_MESSAGE);
     }
 
     @FXML
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
-        GroupChatApplication.getBackend().deleteChat(App.getChatId());
-        yourMessageArea.setText("You successfully left the chat!");
+        GroupChatApplication.getBackend().deleteChat(thisChatId);
+        yourMessageArea.setText("");
     }
 
     @FXML
@@ -51,14 +53,18 @@ public class ChatController extends GuiController implements ViewListener {
     @Override
     public void updateCurrentChat(List<Message> messages) {
         for(Message m : messages){
-            if(m.getMessageType() == MessageType.TEXT_MESSAGE){
+            if(m.getMessageType() != MessageType.CREATION_REQUEST &&
+                    m.getMessageType() != MessageType.CREATION_REJECT){
                 String sender;
                 if(m.getSenderIP().equals(GroupChatApplication.getBackend().getLocalAddress()))
-                    sender = "you";
+                    sender = "You";
                 else sender = m.getSenderIP().toString();
-                displayMessages(sender + " : " + m.getMessage());
+                if(m.getMessageType() != MessageType.DELETION_ORDER) displayMessages(sender + " : " + m.getMessage());
+                else {
+                    System.err.println(sender + " left the chat");
+                    warningLabel.setText(sender + " left the chat");
+                }
             }
-
         }
     }
 
@@ -77,7 +83,8 @@ public class ChatController extends GuiController implements ViewListener {
             messageSlots.get(i).setText(messagesList[i]);
     }
 
-    public void setUpChat(){
-        chatIdLabel.setText(App.getChatId());
+    public void setUpChat(String id){
+        chatIdLabel.setText(id);
+        thisChatId = id;
     }
 }

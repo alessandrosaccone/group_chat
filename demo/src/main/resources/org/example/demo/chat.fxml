@@ -88,6 +88,11 @@
          </font>
       </Label>
       <Button fx:id="rejoinButton" layoutX="629.0" layoutY="506.0" mnemonicParsing="false" onAction="#handleRejoinButtonClick" prefHeight="26.0" prefWidth="200.0" text="Rejoin chat" />
+      <Label fx:id="warningLabel" layoutX="436.0" layoutY="118.0" textFill="#df0707">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
    <fx:define>
       <ArrayList fx:id="messageSlots">
