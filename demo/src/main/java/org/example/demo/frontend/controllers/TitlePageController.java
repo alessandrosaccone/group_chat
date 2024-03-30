@@ -88,6 +88,7 @@ public class TitlePageController extends GuiController implements Initializable,
         addHostButton.setDisable(true);
         addHostButton.setOpacity(0.5);
         confirmedStatus = true;
+        advLabel.setText("");
     }
 
     private void cleanSetup() {

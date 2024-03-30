@@ -68,6 +68,7 @@ public class App {
                 System.out.println("CHAT CLOSED!!");
             }
         });
+        chatController.setStage(stage);
         stage.setScene(scene);
         stage.show();
     }

@@ -8,61 +8,61 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.util.ArrayList?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.ChatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.ChatController">
    <children>
-      <Label layoutX="92.0" layoutY="35.0" text="High Available, Casually Ordered Chat">
+      <Label fx:id="title" layoutX="92.0" layoutY="35.0" text="High Available, Casually Ordered Chat">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
       </Label>
-      <Pane layoutX="35.0" layoutY="144.0" prefHeight="427.0" prefWidth="340.0">
+      <Pane fx:id="messageArea" layoutX="35.0" layoutY="144.0" prefHeight="427.0" prefWidth="560.0">
          <children>
-            <Label fx:id="msg1" layoutX="135.0" layoutY="25.0">
+            <Label fx:id="msg1" layoutX="15.0" layoutY="25.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg2" layoutX="135.0" layoutY="65.0">
+            <Label fx:id="msg2" layoutX="15.0" layoutY="65.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg3" layoutX="135.0" layoutY="105.0">
+            <Label fx:id="msg3" layoutX="15.0" layoutY="105.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg4" layoutX="135.0" layoutY="145.0">
+            <Label fx:id="msg4" layoutX="15.0" layoutY="145.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg5" layoutX="135.0" layoutY="185.0">
+            <Label fx:id="msg5" layoutX="15.0" layoutY="185.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg6" layoutX="135.0" layoutY="225.0">
+            <Label fx:id="msg6" layoutX="15.0" layoutY="225.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg7" layoutX="135.0" layoutY="265.0">
+            <Label fx:id="msg7" layoutX="15.0" layoutY="265.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg8" layoutX="135.0" layoutY="305.0">
+            <Label fx:id="msg8" layoutX="15.0" layoutY="305.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg9" layoutX="135.0" layoutY="343.0">
+            <Label fx:id="msg9" layoutX="15.0" layoutY="343.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="msg10" layoutX="131.0" layoutY="385.0">
+            <Label fx:id="msg10" layoutX="15.0" layoutY="385.0">
                <font>
                   <Font size="15.0" />
                </font>
@@ -74,7 +74,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="642.0" layoutY="108.0" text="Your Message">
+      <Label layoutX="648.0" layoutY="108.0" prefHeight="23.0" prefWidth="182.0" text="Your Message">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
@@ -87,12 +87,12 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Button fx:id="rejoinButton" layoutX="629.0" layoutY="506.0" mnemonicParsing="false" onAction="#handleRejoinButtonClick" prefHeight="26.0" prefWidth="200.0" text="Rejoin chat" />
-      <Label fx:id="warningLabel" layoutX="436.0" layoutY="118.0" textFill="#df0707">
+      <Label fx:id="warningLabel" layoutX="436.0" layoutY="108.0" textFill="#df0707">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
+      <Label layoutX="657.0" layoutY="132.0" text="(max 35 chars)" />
    </children>
    <fx:define>
       <ArrayList fx:id="messageSlots">

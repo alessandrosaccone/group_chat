@@ -1,8 +1,10 @@
 package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.backend.enums.MessageType;
@@ -19,16 +21,22 @@ public class ChatController extends GuiController implements ViewListener {
     private TextArea yourMessageArea;
     @FXML
     private Label warningLabel;
+    private Stage stage;
     private final String[] messagesList = {"", "", "", "", "", "", "", "", "", ""};
     private String thisChatId;
 
     @FXML
     private void handleSendButtonClick() {
         String message = yourMessageArea.getText();
+        warningLabel.setText("");
         if(message == null || message.equals("")){
             System.err.println("No message written");
-            yourMessageArea.setText("NO MESSAGE WRITTEN.\n" +
-                    "PLEASE, WRITE SOMETHING HERE!");
+            warningLabel.setText("No message written");
+            yourMessageArea.setText("PLEASE, WRITE SOMETHING HERE!");
+            return;
+        }
+        if(message.length() > 35){
+            warningLabel.setText("Message too long!");
             return;
         }
         System.out.println("Message <<" + message + ">> to be send. Juxtaposed to the sending queue");
@@ -41,13 +49,9 @@ public class ChatController extends GuiController implements ViewListener {
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
         GroupChatApplication.getBackend().deleteChat(thisChatId);
+        GroupChatApplication.getBackend().closeAllConnections();
         yourMessageArea.setText("");
-    }
-
-    @FXML
-    private void handleRejoinButtonClick(){
-        System.out.println("Rejoining...");
-        yourMessageArea.setText("You successfully rejoined the chat!!");
+        stage.close();
     }
 
     @Override
@@ -55,10 +59,10 @@ public class ChatController extends GuiController implements ViewListener {
         for(Message m : messages){
             if(m.getMessageType() != MessageType.CREATION_REQUEST &&
                     m.getMessageType() != MessageType.CREATION_REJECT){
-                String sender;
+                String sender = "From ";
                 if(m.getSenderIP().equals(GroupChatApplication.getBackend().getLocalAddress()))
-                    sender = "You";
-                else sender = m.getSenderIP().toString();
+                    sender = sender + "You";
+                else sender = sender + m.getSenderIP().toString();
                 if(m.getMessageType() != MessageType.DELETION_ORDER) displayMessages(sender + " : " + m.getMessage());
                 else {
                     System.err.println(sender + " left the chat");
@@ -87,4 +91,6 @@ public class ChatController extends GuiController implements ViewListener {
         chatIdLabel.setText(id);
         thisChatId = id;
     }
+
+    public void setStage(Stage stage){this.stage = stage;}
 }
