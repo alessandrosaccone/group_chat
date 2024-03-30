@@ -43,5 +43,7 @@
         <Label fx:id="thirdTitle" layoutX="211.0" layoutY="322.0" text="Select a user to be added to the current chat room" />
       <Button fx:id="selectPartecipantButton" layoutX="678.0" layoutY="407.0" mnemonicParsing="false" onAction="#handleSelectPartecipantButtonClick" text="Select partecipant" />
       <Button layoutX="289.0" layoutY="189.0" mnemonicParsing="false" onAction="#handleConfirmCurrentSetClick" prefHeight="26.0" prefWidth="333.0" text="Confirm actual set of available addresses" />
+      <Label layoutX="700.0" layoutY="76.0" text="Your ip address is" />
+      <Label fx:id="yourIpLabel" layoutX="705.0" layoutY="109.0" text="255.255.255.255" />
     </children>
 </AnchorPane>

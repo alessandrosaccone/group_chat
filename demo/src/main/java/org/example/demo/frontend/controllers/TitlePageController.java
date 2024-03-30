@@ -11,7 +11,10 @@ import org.example.demo.App;
 import org.example.demo.GroupChatApplication;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.frontend.listeners.ViewListener;
+
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,6 +37,8 @@ public class TitlePageController extends GuiController implements Initializable,
     private ChoiceBox<String> currentPartecipantsBox;
     @FXML
     private Button addHostButton;
+    @FXML
+    private Label yourIpLabel;
 
     private int numberOfUsers;
     private boolean confirmedStatus;
@@ -154,6 +159,11 @@ public class TitlePageController extends GuiController implements Initializable,
             numberOfUsers = numUserChoice.getValue();
         });
         setAddressesBox.getItems().add("you");
+        try {
+            yourIpLabel.setText(InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
