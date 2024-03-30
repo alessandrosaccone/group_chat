@@ -59,7 +59,6 @@ public class ChatController extends GuiController implements ViewListener {
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
         GroupChatApplication.getBackend().deleteChat(thisChatId);
-        GroupChatApplication.getBackend().closeAllConnections();
         yourMessageArea.setText("");
         stage.close();
     }
