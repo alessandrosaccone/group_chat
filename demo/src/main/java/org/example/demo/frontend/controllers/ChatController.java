@@ -1,7 +1,6 @@
 package org.example.demo.frontend.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -12,6 +11,9 @@ import org.example.demo.frontend.listeners.ViewListener;
 
 import java.util.List;
 
+/**
+ * This method is the controller of the GUI for the chat.
+ */
 public class ChatController extends GuiController implements ViewListener {
     @FXML
     private Label chatIdLabel;
@@ -25,6 +27,10 @@ public class ChatController extends GuiController implements ViewListener {
     private final String[] messagesList = {"", "", "", "", "", "", "", "", "", ""};
     private String thisChatId;
 
+    /**
+     * This method manges the interaction with the user in order to send messages. It invokes the corresponding backend
+     * method.
+     */
     @FXML
     private void handleSendButtonClick() {
         String message = yourMessageArea.getText();
@@ -45,6 +51,10 @@ public class ChatController extends GuiController implements ViewListener {
                 thisChatId, message, MessageType.TEXT_MESSAGE);
     }
 
+    /**
+     * This method manages the interaction to delete the current chat. After the invocation of the corresponding
+     * backend method, it closes the chat window
+     */
     @FXML
     private void handleQuitButtonClick() {
         System.out.println("Quit button clicked!");
@@ -54,6 +64,11 @@ public class ChatController extends GuiController implements ViewListener {
         stage.close();
     }
 
+    /**
+     * This method allows the showing of the new messages. Obviously it manages not only text messages but also some
+     * informative ones
+     * @param messages - the incoming messages list
+     */
     @Override
     public void updateCurrentChat(List<Message> messages) {
         for(Message m : messages){
@@ -72,11 +87,18 @@ public class ChatController extends GuiController implements ViewListener {
         }
     }
 
+    /**
+     * Implementation of updateInfo, not implemented
+     */
     @Override
     public void updateInfo() {
         //NOT IMPLEMENTED
     }
 
+    /**
+     * This method writes the incoming messages in the messages area
+     * @param message - the given message to be displayed
+     */
     private void displayMessages(String message){
         for(int i=0; i<messagesList.length - 1; i++){
             messagesList[i] = messagesList[i  + 1];
@@ -87,10 +109,18 @@ public class ChatController extends GuiController implements ViewListener {
             messageSlots.get(i).setText(messagesList[i]);
     }
 
+    /**
+     * Method to set up the chat (to display the chatId)
+     * @param id - the id of the current chat
+     */
     public void setUpChat(String id){
         chatIdLabel.setText(id);
         thisChatId = id;
     }
 
+    /**
+     * Method used to close the window when quitting
+     * @param stage - the window to be closed
+     */
     public void setStage(Stage stage){this.stage = stage;}
 }

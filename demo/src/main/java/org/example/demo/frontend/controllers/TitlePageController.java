@@ -15,6 +15,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * This method is the controller of the main page of the Application. It manages all the stuffs regarding the
+ * interactions with the user in order to initialize and launch a chat
+ */
 public class TitlePageController extends GuiController implements Initializable, ViewListener {
     @FXML
     private ChoiceBox<Integer> numUserChoice;
@@ -39,6 +43,10 @@ public class TitlePageController extends GuiController implements Initializable,
 
     }
 
+    /**
+     * This method handle the creation of a new chat. It launches the runApplication method that creates effectively the
+     * new chat
+     */
     @FXML
     private void handleCreateChatButtonClick() {
         System.out.println("Button create chat clicked!");
@@ -46,6 +54,9 @@ public class TitlePageController extends GuiController implements Initializable,
         cleanSetup();
     }
 
+    /**
+     * This method allow the user to select the partecipants to this chat among all the available addresses
+     */
     @FXML
     private void handleSelectPartecipantButtonClick(){
         if(!confirmedStatus){
@@ -78,6 +89,9 @@ public class TitlePageController extends GuiController implements Initializable,
         App.addHostAddress(chosenUser);
     }
 
+    /**
+     * This method is used to confirm the set of all the available addresses that must be known to the Network manager
+     */
     @FXML
     private void handleConfirmCurrentSetClick(){
         if(confirmedStatus)
@@ -91,6 +105,27 @@ public class TitlePageController extends GuiController implements Initializable,
         advLabel.setText("");
     }
 
+    /**
+     * This method allows the user to insert a new addresses into the set of all the addresses
+     */
+    @FXML
+    private void addHostButtonClick(){
+        String address = addressIp.getText();
+        if(address.equals(""))
+            advLabel.setText("Please, insert an address!!");
+        else {
+            GroupChatApplication.addHostAddress(address);
+            System.out.println("Users whose address is " + address + " added to the set of users");
+            addressIp.setText("");
+            setAddressesBox.getItems().add(address);
+            advLabel.setText("");
+        }
+    }
+
+    /**
+     * This method cleans the attributes and the GUI after the creation of the chat in order to allow the creation
+     * of another one
+     */
     private void cleanSetup() {
         numUserChoice.setValue(2);
         addressIp.setText("");
@@ -99,11 +134,18 @@ public class TitlePageController extends GuiController implements Initializable,
         currentPartecipantsBox.getItems().clear();
     }
 
+    /**
+     * Implementation of updateCurrentChat but here not implemented
+     * @param messages - null
+     */
     @Override
     public void updateCurrentChat(List<Message> messages) {
         //NOT IMPLEMENTED
     }
 
+    /**
+     * Implementation of updateInfo
+     */
     @Override
     public void updateInfo() {
         numUserChoice.getItems().addAll( 2, 3, 4, 5, 6, 7, 8, 8, 9, 10);
@@ -112,20 +154,6 @@ public class TitlePageController extends GuiController implements Initializable,
             numberOfUsers = numUserChoice.getValue();
         });
         setAddressesBox.getItems().add("you");
-    }
-
-    @FXML
-    private void addHostButtonClick(){
-         String address = addressIp.getText();
-         if(address.equals(""))
-             advLabel.setText("Please, insert an address!!");
-         else {
-             GroupChatApplication.addHostAddress(address);
-             System.out.println("Users whose address is " + address + " added to the set of users");
-             addressIp.setText("");
-             setAddressesBox.getItems().add(address);
-             advLabel.setText("");
-         }
     }
 
 }
