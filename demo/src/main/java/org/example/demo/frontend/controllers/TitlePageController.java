@@ -108,6 +108,7 @@ public class TitlePageController extends GuiController implements Initializable,
         addHostButton.setOpacity(0.5);
         confirmedStatus = true;
         advLabel.setText("");
+        GroupChatApplication.setupNetwork();
     }
 
     /**

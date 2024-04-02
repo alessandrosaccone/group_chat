@@ -73,6 +73,8 @@ public class GroupChatApplication extends Application {
             @Override
             public void handle(WindowEvent windowEvent) {
                 System.out.println("Closing application...");
+                if(getBackend() != null)
+                    getBackend().closeAllConnections();
                 System.out.println("APPLICATION CLOSED!!");
                 System.exit(0);
             }
@@ -82,14 +84,17 @@ public class GroupChatApplication extends Application {
         stage.show();
     }
 
+    public static void setupNetwork(){
+        GroupChatApplication.setNetworkManager(new NetworkManagerImpl(1234,
+                GroupChatApplication.getAddresses()));
+    }
+
     /**
      * This method setups the backend and create a new Chat session, put the created chat into the chats attribute and
      * then run it
      * @param stage - the stage of the application
      */
     public static void runApplication(Stage stage) {
-        GroupChatApplication.setNetworkManager(new NetworkManagerImpl(1234,
-                GroupChatApplication.getAddresses()));
         App newChat = new App();
         chats.put(newChat.getChatId(), newChat);
         newChat.runChat(stage);

@@ -64,7 +64,6 @@ public class App {
             public void handle(WindowEvent windowEvent) {
                 System.out.println("Closing the chat whose id is " + chatId);
                 GroupChatApplication.getBackend().deleteChat(chatId);
-                GroupChatApplication.getBackend().closeAllConnections();
                 System.out.println("CHAT CLOSED!!");
             }
         });
