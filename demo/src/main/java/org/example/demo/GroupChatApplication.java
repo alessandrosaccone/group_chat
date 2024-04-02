@@ -39,6 +39,11 @@ public class GroupChatApplication extends Application {
 
     private static final Map<String, App> chats = new HashMap<>();
 
+    public static void deleteChat(String chatId) {
+        chats.remove(chatId);
+        System.out.println("GUI for chat "+ chatId + " has been deleted!");
+    }
+
     /**
      * This method is for the GUI
      * @param stage - the stage of the application
@@ -84,6 +89,10 @@ public class GroupChatApplication extends Application {
         stage.show();
     }
 
+    /**
+     * This method instantiates the backend in order to establish the connection towards the nodes of the
+     * confirmed network
+     */
     public static void setupNetwork(){
         GroupChatApplication.setNetworkManager(new NetworkManagerImpl(1234,
                 GroupChatApplication.getAddresses()));
@@ -120,16 +129,6 @@ public class GroupChatApplication extends Application {
      */
     public static void setNetworkManager(NetworkManager networkManager) {
         GroupChatApplication.networkManager = networkManager;
-    }
-
-    /**
-     * This method set the status of the connection of the given client when this one leaves the chat.
-     * @param id - the current chat id in which the disconnection happens
-     * @param status - the status of the connection (true if connected, otherwise false)
-     */
-    public static void setChatStatus(String id, boolean status){
-        App temp = chats.values().stream().filter(chat -> chat.getChatId().equals(id)).findFirst().orElseThrow();
-        temp.setConnectedStatus(status);
     }
 
     /**

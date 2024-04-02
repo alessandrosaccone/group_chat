@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.example.demo.backend.classes.Message;
-import org.example.demo.backend.enums.MessageType;
 import org.example.demo.frontend.controllers.ChatController;
 
 import java.io.IOException;
@@ -32,11 +31,6 @@ public class App {
      */
     private final ArrayList<InetAddress> chatAddresses = new ArrayList<>();
     private String chatId;
-    /**
-     * This attribute defined the connected status and it is use in order to figure out when this client has left or not
-     * the current chat
-     */
-    private boolean connected = true;
 
     /**
      * Just a simple constructor that copy the selected addresses into the real ones
@@ -64,6 +58,7 @@ public class App {
             public void handle(WindowEvent windowEvent) {
                 System.out.println("Closing the chat whose id is " + chatId);
                 GroupChatApplication.getBackend().deleteChat(chatId);
+                GroupChatApplication.deleteChat(chatId);
                 System.out.println("CHAT CLOSED!!");
             }
         });
@@ -74,7 +69,7 @@ public class App {
 
     /**
      * This method allow to launch the chat session
-     * @param stage
+     * @param stage - the given stage
      */
     public void runChat(Stage stage) {
         try {
@@ -106,9 +101,6 @@ public class App {
                 if(messages.size() > 0){
                     System.out.println("Messages received on chat " + id);
                     ArrayList<Message> finalMessages = messages;
-                    if(messages.stream().filter(m -> m.getMessageType() == MessageType.DELETION_ORDER)
-                            .anyMatch(m -> m.getSenderIP() == GroupChatApplication.getBackend().getLocalAddress()))
-                        GroupChatApplication.setChatStatus(id, true);
                     Platform.runLater(() -> controller.updateCurrentChat(finalMessages));
                 }
             }
@@ -128,16 +120,6 @@ public class App {
     }
 
     /*----- SETTERS AND GETTERS -----*/
-
-    /**
-     * This method set the connection status for the current client in the current chat. Used to figure out if the
-     * current client has left the chat or not.
-     * @param status - the status (true if connected, otherwise false)
-     */
-    public void setConnectedStatus(boolean status) {
-        this.connected = status;
-        System.out.println("Status for chat " + chatId + " set to " + status);
-    }
 
     /**
      * The get method for the current selected addresses
