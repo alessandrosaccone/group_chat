@@ -7,3 +7,11 @@ The application should be fully distributed, meaning that user clients should ex
 The application should be highly available, meaning that users should be able to use the chat (read and write messages) even if they are temporarily disconnected from the network. 
 
 Assumptions: clients and links are reliable, but clients can join and leave the network at any time.
+
+## How to launch the application
+To run the application, follow these steps:
+  0. Download a version of JavaFX (recomended version openjfx 20 or later). See this link https://gluonhq.com/products/javafx/
+  1. Download the JAR file "group_chat.jar" from the Delivery folder
+  2. Open a terminal and navigate to the directory in which you have saved the downloaded file
+  3. Perform the command below
+     java --module-path path/to/javafx/lib --add-module javafx.controls,javafx.fxml -jar group_chat.jar
