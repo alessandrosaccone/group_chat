@@ -11,7 +11,7 @@ Assumptions: clients and links are reliable, but clients can join and leave the 
 ## How to launch the application
 To run the application, follow these steps:
 For first, you have to download a version of JavaFX (recomended version openjfx 20 or later). See this link https://gluonhq.com/products/javafx/
-  1. Download the JAR file "group_chat.jar" from the Delivery folder
+  1. Download the JAR file "group_chat.jar" from the deliverables folder
   2. Open a terminal and navigate to the directory in which you have saved the downloaded file
   3. Perform the command below
      java --module-path path/to/javafx/lib --add-module javafx.controls,javafx.fxml -jar group_chat.jar
