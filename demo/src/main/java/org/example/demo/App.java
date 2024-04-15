@@ -77,10 +77,24 @@ public class App {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        chatId = GroupChatApplication.getBackend().createNewChat(chatAddresses);
         chatController.setUpChat(chatId);
         System.out.println("Chat " + chatId + " creation");
         addListener(chatController, chatId);
+    }
+
+    /**
+     * This method invokes the backend in order to create a chat
+     */
+    public void createChat(){
+        chatId = GroupChatApplication.getBackend().createNewChat(chatAddresses);
+    }
+
+    /**
+     * This method just set for this instance of App the current chatID
+     * @param chatId - the current chatID
+     */
+    public void joinChat(String chatId){
+        this.chatId = chatId;
     }
 
     /**

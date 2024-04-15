@@ -9,12 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.demo.App;
 import org.example.demo.GroupChatApplication;
+import org.example.demo.backend.classes.Chat;
 import org.example.demo.backend.classes.Message;
 import org.example.demo.frontend.listeners.ViewListener;
 
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -55,6 +57,11 @@ public class TitlePageController extends GuiController implements Initializable,
     @FXML
     private void handleCreateChatButtonClick() {
         System.out.println("Button create chat clicked!");
+        if(App.getAddresses().isEmpty()){
+            System.err.println("IS EMPTY");
+            advLabel.setText("Please, select the chat's partecipants!");
+            return;
+        }
         GroupChatApplication.runApplication(new Stage());
         cleanSetup();
     }
@@ -126,6 +133,27 @@ public class TitlePageController extends GuiController implements Initializable,
             setAddressesBox.getItems().add(address);
             advLabel.setText("");
         }
+    }
+
+
+    /**
+     * This method allow the user to choose between all the available chats and then join one of them
+     */
+    @FXML
+    private void handleSeeChatsButtonClick(){
+        if(GroupChatApplication.getBackend() == null){
+            advLabel.setText("You have to confirm the host addresses");
+            System.err.println("No backend found");
+            return;
+        }
+        ArrayList<Chat> chats = GroupChatApplication.getBackend().getChats();
+        if(chats == null || chats.size() == 0){
+            System.err.println("No chats available");
+            advLabel.setText("No available chats");
+            return;
+        }
+        System.err.println(chats.get(0).getID());
+        GroupChatApplication.showChats(chats);
     }
 
     /**

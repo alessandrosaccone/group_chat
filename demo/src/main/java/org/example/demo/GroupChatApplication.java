@@ -6,8 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.example.demo.backend.classes.Chat;
 import org.example.demo.backend.classes.NetworkManagerImpl;
 import org.example.demo.backend.interfaces.NetworkManager;
+import org.example.demo.frontend.controllers.AvailableChatsController;
 import org.example.demo.frontend.controllers.GuiController;
 import org.example.demo.frontend.controllers.TitlePageController;
 
@@ -24,7 +26,7 @@ public class GroupChatApplication extends Application {
     /**
      * These three attributes are needed for the GUI
      */
-    static String fxml = "main-page.fxml";
+    static List<String> fxmls = new ArrayList<>(Arrays.asList("main-page.fxml", "available-chats.fxml"));
     static Map<String, Scene> scenes = new HashMap<String, Scene>();
     private static final Map<String, GuiController> guiControllers = new HashMap<String, GuiController>();
     /**
@@ -68,25 +70,49 @@ public class GroupChatApplication extends Application {
      * @throws IOException - if anything goes wrong
      */
     private static void setupApplication(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GroupChatApplication.class.getResource(fxml));
-        scenes.put(fxml, new Scene(fxmlLoader.load(), 900, 600));
-        GuiController ctrl = fxmlLoader.getController();
-        GroupChatApplication.guiControllers.put(fxml, ctrl);
-        Scene scene = scenes.get("main-page.fxml");
-        stage.setTitle("High Available Group Chat Application");
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                System.out.println("Closing application...");
-                if(getBackend() != null)
-                    getBackend().closeAllConnections();
-                System.out.println("APPLICATION CLOSED!!");
-                System.exit(0);
-            }
-        });
-        stage.setScene(scene);
-        ((TitlePageController) GroupChatApplication.guiControllers.get("main-page.fxml")).updateInfo();
+        for(String fxml : fxmls){
+            FXMLLoader fxmlLoader = new FXMLLoader(GroupChatApplication.class.getResource(fxml));
+            scenes.put(fxml, new Scene(fxmlLoader.load()));
+            GuiController ctrl = fxmlLoader.getController();
+            GroupChatApplication.guiControllers.put(fxml, ctrl);
+            Scene scene = scenes.get("main-page.fxml");
+            stage.setTitle("High Available Group Chat Application");
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    System.out.println("Closing application...");
+                    if(getBackend() != null)
+                        getBackend().closeAllConnections();
+                    System.out.println("APPLICATION CLOSED!!");
+                    System.exit(0);
+                }
+            });
+            stage.setScene(scene);
+            ((TitlePageController) GroupChatApplication.guiControllers.get("main-page.fxml")).updateInfo();
+            stage.show();
+        }
+    }
+
+    /**
+     * This method is used to display the window containing the list of the available chats
+     * @param chats - the current available chat
+     */
+    public static void showChats(ArrayList<Chat> chats) {
+        Stage stage = new Stage();
+        stage.setScene(scenes.get("available-chats.fxml"));
+        ((AvailableChatsController) (guiControllers.get("available-chats.fxml"))).setup(chats, stage);
         stage.show();
+    }
+
+    /**
+     * This method arrange the joining process for a given chat
+     * @param chat - the chat in which the host wants to join
+     */
+    public static void joinChat(Chat chat) {
+        App newChat = new App();
+        chats.put(chat.getID(), newChat);
+        newChat.joinChat(chat.getID());
+        newChat.runChat(new Stage());
     }
 
     /**
@@ -106,6 +132,7 @@ public class GroupChatApplication extends Application {
     public static void runApplication(Stage stage) {
         App newChat = new App();
         chats.put(newChat.getChatId(), newChat);
+        newChat.createChat();
         newChat.runChat(stage);
     }
 
