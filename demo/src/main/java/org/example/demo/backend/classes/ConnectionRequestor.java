@@ -5,6 +5,7 @@ import org.example.demo.backend.interfaces.NetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.Random;
 
 public class ConnectionRequestor extends Thread {
@@ -30,10 +31,11 @@ public class ConnectionRequestor extends Thread {
                 // connection established: the NetworkManager is notified that the task has been completed
                 networkManager.setNewConnection(nodeIP, socket);
                 networkManager.RequestorTerminated(nodeIP);
+                System.out.println("CONNREQUESTOR: ["+ LocalTime.now()+"]"+"Connection established with node "+nodeIP+" port "+hostPort);
                 return;
 
             } catch (IOException e) {
-                System.err.println("Error while trying to connect to " + nodeIP + ":" + hostPort);
+                System.err.println("CONNREQUESTOR: ["+ LocalTime.now()+"]"+"Error while trying to connect to " + nodeIP + ":" + hostPort);
             } catch (InterruptedException ex) {
                 //throw new RuntimeException(ex);
             }

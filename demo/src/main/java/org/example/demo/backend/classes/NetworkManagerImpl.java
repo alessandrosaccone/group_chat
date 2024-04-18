@@ -5,6 +5,7 @@ import org.example.demo.backend.interfaces.NetworkManager;
 
 import java.io.IOException;
 import java.net.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,8 +52,8 @@ public class NetworkManagerImpl implements NetworkManager {
             String partialLocalAddress = InetAddress.getLocalHost().toString().split("/")[1];
             this.localAddress = InetAddress.getByName(partialLocalAddress);
         } catch (IOException e) {
-            System.out.println("Server Socket error: "+ e.getMessage());
-            System.out.println("Application terminated due to a set up error.");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Server Socket error: "+ e.getMessage());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Application terminated due to a set up error.");
             System.exit(-1);
         }
         // threads initialization
@@ -81,14 +82,14 @@ public class NetworkManagerImpl implements NetworkManager {
             this.senders.add(sender);
             sender.start();
         }
-        System.out.println("All thread correctly started");
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"All thread correctly started");
     }
 
     @Override
     // this method just "remove" from the set of requestor the Requestor that is just terminated
     public synchronized void RequestorTerminated(InetAddress node) {
         this.connectionRequestors.replace(node,null);
-        System.out.println("Requestor for node "+ node.toString()+ "has terminated its job");
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Requestor for node "+ node.toString()+ "has terminated its job");
     }
 
     // this method brutally terminates all the thread and related socket connections
@@ -96,9 +97,9 @@ public class NetworkManagerImpl implements NetworkManager {
     public synchronized void closeAllConnections() {
         try{
             //TODO: convert in log
-            System.out.println("Number of sender to close: "+this.senders.size());
-            System.out.println("Number of receiver to close: "+this.receivers.size());
-            System.out.println("Number of requestor to close: "+this.connectionRequestors.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of sender to close: "+this.senders.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of receiver to close: "+this.receivers.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of requestor to close: "+this.connectionRequestors.size());
             // interrupting connectionAcceptor
             this.connectionAcceptor.interrupt();
             this.serverSocket.close();
@@ -110,11 +111,11 @@ public class NetworkManagerImpl implements NetworkManager {
                 if(this.connectionRequestors.get(node) != null){ this.connectionRequestors.get(node).interrupt();}
                 if(this.sockets.get(node) != null) { this.sockets.get(node).close(); }
                 //TODO: convert in log
-                System.out.println("All connections with " + node.getHostAddress() +" closed");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"All connections with " + node.getHostAddress() +" closed");
             }
         } catch (IOException e) {
             // In any case the application closes
-            System.out.println("Error on closing sockets");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on closing sockets");
             throw new RuntimeException(e);
         }
 
@@ -143,13 +144,13 @@ public class NetworkManagerImpl implements NetworkManager {
        from the list of sockets (if exists) and invoke a new ConnectionRequestor (if not already exists)
      */
     public synchronized void connectionLost(InetAddress node, Socket corruptedSocket) {
-        System.out.println("Connection lost with node "+node.toString());
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Connection lost with node "+node.toString());
         // checking if the corrupted socket has been already removed but no Requestor related to the node IP is working on
         if(this.sockets.get(node) == null && this.connectionRequestors.get(node) == null ) {
             ConnectionRequestor requestor = new ConnectionRequestor(node, this.acceptPort,this);
             this.connectionRequestors.replace(node, requestor);
             requestor.start();
-            System.out.println("New requestor for node "+ node+ " has been activated");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"New requestor for node "+ node+ " has been activated");
         }
         // checking if it's the first time someone notify that the socket is corrupted
         else if(this.sockets.get(node)!=null && this.sockets.get(node).equals(corruptedSocket)){
@@ -157,8 +158,9 @@ public class NetworkManagerImpl implements NetworkManager {
             ConnectionRequestor requestor = new ConnectionRequestor(node, this.acceptPort,this);
             this.connectionRequestors.replace(node, requestor);
             requestor.start();
-            System.out.println("New requestor for node "+ node+ " has been activated");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"New requestor for node "+ node+ " has been activated");
         }
+        else {
         /*
         All the other cases:
         - socket NULL and requestor NOT NULL --> do nothing (someone is already trying to establish a new connection)
@@ -167,7 +169,8 @@ public class NetworkManagerImpl implements NetworkManager {
         NOTE: It's assumed that when a new connection is established, the Requestor thread updates the socket list
               and remove itself from the requestor list before terminating.
          */
-        System.out.println("No new requestor needed for node " + node);
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"No new requestor needed for node " + node);
+        }
     }
 
     @Override
@@ -182,7 +185,7 @@ public class NetworkManagerImpl implements NetworkManager {
             try{
                 newSocket.close();
             } catch (IOException e) {
-                System.out.println("Error on closing socket for node "+node.toString());
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on closing socket for node "+node.toString());
                 throw new RuntimeException(e);
             }
         }
@@ -256,7 +259,7 @@ public class NetworkManagerImpl implements NetworkManager {
         }
         // TODO: implement with exception
         // Until now, if the chat do not exists, the message is simply not sent
-        else{ System.out.println("ERROR: chatID not existing!");}
+        else{ System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"ERROR: chatID not existing!");}
     }
 
     @Override
@@ -280,7 +283,7 @@ public class NetworkManagerImpl implements NetworkManager {
         this.chats.put(uniqueID, newChat);
         this.chatMessagesToBeShown.put(uniqueID, new ArrayList<>());
         this.chatMessageWaiting.put(uniqueID, new ArrayList<>());
-        System.out.println("New chat created with ID "+uniqueID);
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"New chat created with ID "+uniqueID);
         // sending the creation message (with the set of participants) to all the participants
         this.setMessageToBeSent(uniqueID, participantsComplete.toString(),MessageType.CREATION_REQUEST);
         return uniqueID;
@@ -295,11 +298,11 @@ public class NetworkManagerImpl implements NetworkManager {
         if(this.chats.get(chatID)!=null){
            this.setMessageToBeSent(chatID,"",MessageType.DELETION_ORDER);
            this.chats.remove(chatID);
-           System.out.println("Chat "+chatID+" deleted");
+           System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Chat "+chatID+" deleted");
         }
         // TODO: implement with exceptions
         // Until now, if the chat do not exists, simply do nothing
-        else{ System.out.println("ERROR: chatID not existing!"); }
+        else{ System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"ERROR: chatID not existing!"); }
     }
 
     @Override
@@ -315,7 +318,7 @@ public class NetworkManagerImpl implements NetworkManager {
     public synchronized Chat getChat(String chatID){
         Chat chat = this.chats.get(chatID);
         if(chat==null){
-            System.out.println("ERROR! Requested chat not exists!");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"ERROR! Requested chat not exists!");
         }
         return chat;
     }
@@ -328,7 +331,7 @@ public class NetworkManagerImpl implements NetworkManager {
     public synchronized HashMap<InetAddress, Integer> getChatVectorClock(String chatID) {
         Chat chat = this.chats.get(chatID);
         if(chat == null){
-            System.out.println("ERROR: chatID not existing!");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"ERROR: chatID not existing!");
             return null;
         }
         return chat.getVectorClock();
@@ -349,7 +352,7 @@ public class NetworkManagerImpl implements NetworkManager {
         // a CREATION_REQUEST message must be managed in a particular way since the majority on the method assume
         // that the chat already exists locally (fact that cannot subsist in this case)
         if(newMessage.getMessageType().equals(MessageType.CREATION_REQUEST)){
-            System.out.println("CREATION_REQUEST message received with ID"+ chatID);
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"CREATION_REQUEST message received with ID"+ chatID);
             if(this.isIDUnique(chatID)){
                 // creation of a new chat
                 Chat newChat = new Chat(chatID, this.getAddressByMessage(text));
@@ -369,7 +372,7 @@ public class NetworkManagerImpl implements NetworkManager {
                 }
                 this.chatMessageWaiting.put(chatID, newMessagesToConsider);
                 // chat is considered created (if no CREATION_REJECT messages are received)
-                System.out.println("Chat "+ chatID+ " created");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Chat "+ chatID+ " created");
             }
             else{
                 // we cannot simply invoke the method setMessageToBeSent since it assumes the existence of the chat
@@ -387,11 +390,11 @@ public class NetworkManagerImpl implements NetworkManager {
                         this.messagesToBeSent.replace(node, newMessages);
                     }
                 }
-                System.out.println("Chat with ID "+ chatID+ " already exist. CREATION_REJECT message sent to the participants");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Chat with ID "+ chatID+ " already exist. CREATION_REJECT message sent to the participants");
             }
         }
         else if(isVectorClockCoherent(newMessage)){
-            System.out.println("Message of type "+ newMessage.getMessageType().toString()+ " received");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Message of type "+ newMessage.getMessageType().toString()+ " received");
             // manages message
             switch (newMessage.getMessageType()){
                 case CREATION_REJECT -> {
@@ -403,13 +406,13 @@ public class NetworkManagerImpl implements NetworkManager {
                     }
                     this.chats.remove(chatID);
                     this.chatMessageWaiting.remove(chatID);
-                    System.out.println("ChatID "+ chatID+ " rejected by "+ senderIP);
+                    System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"ChatID "+ chatID+ " rejected by "+ senderIP);
                 }
                 case DELETION_ORDER -> {
                     this.IDProposal.remove(chatID); // the remove do NOT raise exception if the entry doesn't exist
                     this.chats.remove(chatID);
                     this.chatMessageWaiting.remove(chatID);
-                    System.out.println("Chat "+ chatID+ " deleted by "+ senderIP);
+                    System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Chat "+ chatID+ " deleted by "+ senderIP);
                 }
                 case TEXT_MESSAGE -> {
                     // check if some waiting message can be freed by invoking in loop this procedure
@@ -447,7 +450,7 @@ public class NetworkManagerImpl implements NetworkManager {
                 inetAddresses.add(InetAddress.getByName(address));
             } catch (UnknownHostException e) {
                 // TODO: implements in a better way
-                System.out.println("Error on identifying the participants of the chat");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on identifying the participants of the chat");
                 throw new RuntimeException(e);
             }
         }
@@ -478,7 +481,7 @@ public class NetworkManagerImpl implements NetworkManager {
                 // merging the vector clocks (just incrementing the one related to the sender
                 chat.getVectorClock().replace(senderIP, newMessage.getVectorClock().get(senderIP));
                 this.chats.replace(chat.getID(), chat);
-                System.out.println("Message received in casual order");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Message received in casual order");
                 return true;
             }
             else{
@@ -486,7 +489,7 @@ public class NetworkManagerImpl implements NetworkManager {
                 ArrayList<Message> updatedWaitingMessages = new ArrayList<>(this.chatMessageWaiting.get(chat.getID()));
                 updatedWaitingMessages.add(newMessage);
                 this.chatMessageWaiting.replace(chat.getID(), updatedWaitingMessages);
-                System.out.println("Message received not in order, put in the waiting queue");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Message received not in order, put in the waiting queue");
                 return false;
             }
         }
@@ -501,7 +504,7 @@ public class NetworkManagerImpl implements NetworkManager {
             messagesUpdated.add(newMessage);
             this.messagesForNotExistingChats.replace(newMessage.getChatID(), messagesUpdated);
         }
-        System.out.println("Message received for a non existing chat");
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Message received for a non existing chat");
         return false;
     }
 

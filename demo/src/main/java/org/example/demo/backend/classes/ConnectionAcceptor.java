@@ -4,6 +4,7 @@ import org.example.demo.backend.interfaces.NetworkManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
 
 public class ConnectionAcceptor extends Thread{
     private final ServerSocket serverSocket;
@@ -23,8 +24,9 @@ public class ConnectionAcceptor extends Thread{
                 Socket clientSocket = serverSocket.accept();
                 //serverSocket.setSoTimeout(0);
                 networkManager.setNewConnection(clientSocket.getInetAddress(), clientSocket);
+                System.out.println("CONNACCEPTOR: ["+ LocalTime.now()+"]"+"New connection accepted with node "+ clientSocket.getInetAddress());
             } catch (IOException e) {
-                System.out.println("Error accepting a connection in Connection Acceptor");
+                System.out.println("CONNACCEPTOR: ["+ LocalTime.now()+"]"+"Error accepting a connection in Connection Acceptor");
                 e.printStackTrace();
             }
         }

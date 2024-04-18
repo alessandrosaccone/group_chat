@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class SingleSender extends Thread {
@@ -28,6 +29,7 @@ public class SingleSender extends Thread {
                 try {
                     // trying to retrieve a new connection if the old one has been lost
                     while(socket==null){
+                        System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ ipAddress+ "corrupted, waiting for a recovery...");
                         Thread.sleep(1000);
                         socket = networkManager.getSockets(ipAddress);
                     }
@@ -37,6 +39,7 @@ public class SingleSender extends Thread {
                     for (Message message : toBeSent) {
                         String msg = parseMessage(message);
                         outputStream.writeUTF(msg);
+                        System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Message sent to node "+ ipAddress.toString());
                     }
                     // Clear the list of messages after sending
                     toBeSent.clear();
@@ -44,9 +47,10 @@ public class SingleSender extends Thread {
                 } catch (IOException e) {
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
+                    System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
                 } catch (InterruptedException e) {
                     // Handle thread interruption
-                    System.out.println("Thread interrupted: " + e.getMessage());
+                    System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Thread interrupted: " + e.getMessage());
                 }
             }
         } finally {

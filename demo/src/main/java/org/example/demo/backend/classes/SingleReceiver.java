@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 import org.example.demo.backend.enums.MessageType;
@@ -29,32 +30,35 @@ public class SingleReceiver extends Thread {
                 try {
                     // trying to retrieve a new connection if the old one has been lost
                     while (socket == null) {
+                        System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Socket with node "+ ipAddress+ "corrupted, waiting for a recovery...");
                         Thread.sleep(1000); // waiting for 1 second before retrying
                         socket = networkManager.getSockets(ipAddress);
                     }
 
                     inputStream = new DataInputStream(socket.getInputStream());
 
-                    while (!Thread.currentThread().isInterrupted()) {
+                    while (!Thread.currentThread().isInterrupted()) { // dummy control as a WHILE(TRUE)
                         String messageString = inputStream.readUTF();
 
                         Message message = parseMessage(messageString);
 
                         networkManager.newMessageReceived(message);
+                        System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"New message received and sent to ne NETMANAGER");
                     }
                 } catch (IOException e) {
                     // notifying the NetworkManager that the connection has been probably lost
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
+                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
                 }catch (InterruptedException e) {
-                    System.out.println("Thread interrupted: " + e.getMessage());
+                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Thread interrupted: " + e.getMessage());
                     e.printStackTrace(); // Generic handling
                 }
             }
         } finally{
             // Clean up resources (just the outputStream. Socket will be closed by the NetworkManager)
             if (inputStream != null) {
-                try { inputStream.close(); } catch (IOException e) { System.out.println("Error closing the inputStream"); }
+                try { inputStream.close(); } catch (IOException e) { System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Error closing the inputStream"); }
             }
         }
     }
