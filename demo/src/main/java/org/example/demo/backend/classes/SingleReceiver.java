@@ -76,6 +76,7 @@ public class SingleReceiver extends Thread {
 
         if (fields.length == 5) {
             try {
+
                 //senderIP = InetAddress.getByName(fields[0]); - Incorrect parsing, no need of taking it from the message
                 chatID = fields[1];
                 text = fields[2];
