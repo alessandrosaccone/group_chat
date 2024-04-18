@@ -68,7 +68,7 @@ public class SingleReceiver extends Thread {
 
         String[] fields = messageString.split("\\|");
 
-        InetAddress senderIP = null;
+        InetAddress senderIP = this.ipAddress;
         String chatID = null;
         String text = null;
         MessageType type = null;
@@ -76,13 +76,13 @@ public class SingleReceiver extends Thread {
 
         if (fields.length == 5) {
             try {
-                senderIP = InetAddress.getByName(fields[0]);
+                //senderIP = InetAddress.getByName(fields[0]); - Incorrect parsing, no need of taking it from the message
                 chatID = fields[1];
                 text = fields[2];
                 type = MessageType.valueOf(fields[3]);
                 vectorClock = new HashMap<>();
                 vectorClock.put(senderIP, Integer.valueOf(fields[4]));
-            } catch (UnknownHostException | IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
