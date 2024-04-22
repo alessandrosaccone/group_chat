@@ -47,6 +47,7 @@ public class SingleReceiver extends Thread {
                     }
                 } catch (IOException e) {
                     // notifying the NetworkManager that the connection has been probably lost
+                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"IOEXCEPTION: "+e.getMessage());
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
                     System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");

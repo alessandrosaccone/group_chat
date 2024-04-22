@@ -45,6 +45,7 @@ public class SingleSender extends Thread {
                     toBeSent.clear();
 
                 } catch (IOException e) {
+                    System.out.println("SENDER: ["+ LocalTime.now()+"]"+"IOEXCEPTION: "+e.getMessage());
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
                     System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
