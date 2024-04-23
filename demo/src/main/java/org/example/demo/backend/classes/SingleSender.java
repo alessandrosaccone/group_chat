@@ -14,11 +14,14 @@ public class SingleSender extends Thread {
     private final NetworkManager networkManager;
     private Socket socket;
     private DataOutputStream outputStream;
+    private ArrayList<Message> toBeSent, toBeRemoved;
 
     public SingleSender(InetAddress ipAddress, NetworkManager networkManager) {
         this.ipAddress = ipAddress;
         this.networkManager = networkManager;
         socket = networkManager.getSockets(ipAddress);
+        toBeSent = new ArrayList<>();
+        toBeRemoved = new ArrayList<>();
     }
 
     @Override
@@ -32,23 +35,35 @@ public class SingleSender extends Thread {
                         System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ ipAddress+ "corrupted, waiting for a recovery...");
                         Thread.sleep(1000);
                         socket = networkManager.getSockets(ipAddress);
+                        if(socket!=null){
+                            outputStream = new DataOutputStream(socket.getOutputStream());
+                            System.out.println("SENDER: ["+ LocalTime.now()+"] Output stream correctly obtained");
+                        }
                     }
 
-                    outputStream = new DataOutputStream(socket.getOutputStream());
-                    ArrayList<Message> toBeSent = networkManager.getMessagesToBeSent(ipAddress);
+                    toBeSent.addAll(networkManager.getMessagesToBeSent(ipAddress));
+
                     for (Message message : toBeSent) {
                         String msg = parseMessage(message);
                         outputStream.writeUTF(msg);
-                        System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Message sent to node "+ ipAddress.toString());
+                        // saving all the element that have been removed (needed for consistency reasons, see exception handling section)
+                        toBeRemoved.add(message);
+                        System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Message sent to node "+ ipAddress.toString()+
+                                "\nMessage: "+message.getChatID()+"-"+message.getMessage());
                     }
-                    // Clear the list of messages after sending
+
                     toBeSent.clear();
+                    toBeRemoved.clear();
+                    Thread.sleep(1000);
 
                 } catch (IOException e) {
                     System.out.println("SENDER: ["+ LocalTime.now()+"]"+"IOEXCEPTION: "+e.getMessage());
+                    System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
+                    // removing from the List toBeSent the already sent messages
+                    for(Message message : this.toBeRemoved){ this.toBeSent.remove(message); }
+                    this.toBeRemoved.clear();
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
-                    System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
                 } catch (InterruptedException e) {
                     // Handle thread interruption
                     System.out.println("SENDER: ["+ LocalTime.now()+"]"+"Thread interrupted: " + e.getMessage());

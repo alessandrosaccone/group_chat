@@ -169,7 +169,8 @@ public class NetworkManagerImpl implements NetworkManager {
         NOTE: It's assumed that when a new connection is established, the Requestor thread updates the socket list
               and remove itself from the requestor list before terminating.
          */
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"No new requestor needed for node " + node);
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"No new requestor needed for node " + node +
+                    "\nAvailable connections: "+ this.sockets.keySet().toString());
         }
     }
 
@@ -184,6 +185,9 @@ public class NetworkManagerImpl implements NetworkManager {
         if(this.sockets.putIfAbsent(node, newSocket) != null){
             try{
                 newSocket.close();
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+ "Connection with node "+node.toString()+ "already existing. Connection discarded\n"+
+                        "Available connections: "+ this.sockets.keySet().toString());
+
             } catch (IOException e) {
                 System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on closing socket for node "+node.toString());
                 throw new RuntimeException(e);

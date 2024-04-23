@@ -36,24 +36,26 @@ public class SingleReceiver extends Thread {
                     }
 
                     inputStream = new DataInputStream(socket.getInputStream());
+                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"InputStream correctly obtained");
 
                     while (!Thread.currentThread().isInterrupted()) { // dummy control as a WHILE(TRUE)
                         String messageString = inputStream.readUTF();
 
                         Message message = parseMessage(messageString);
 
+                        System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"New message received\n"+
+                                "Message: "+message.getMessageType()+"-"+message.getMessage()+"-"+message.getChatID());
+
                         networkManager.newMessageReceived(message);
-                        System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"New message received and sent to ne NETMANAGER");
                     }
                 } catch (IOException e) {
                     // notifying the NetworkManager that the connection has been probably lost
                     System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"IOEXCEPTION: "+e.getMessage());
+                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
                     networkManager.connectionLost(ipAddress, socket);
                     socket = null;
-                    System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Socket with node "+ipAddress+ " detected as corrupted");
                 }catch (InterruptedException e) {
                     System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"Thread interrupted: " + e.getMessage());
-                    e.printStackTrace(); // Generic handling
                 }
             }
         } finally{
@@ -85,7 +87,7 @@ public class SingleReceiver extends Thread {
                 vectorClock = new HashMap<>();
                 vectorClock.put(senderIP, Integer.valueOf(fields[4]));
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"ERROR on parsing the message:"+e.getMessage());
             }
         }
 
