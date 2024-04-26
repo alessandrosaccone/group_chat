@@ -83,7 +83,7 @@ public class SingleSender extends Thread {
         res += message.getChatID() + "|";
         res += message.getMessage() + "|";
         res += message.getMessageType() + "|";
-        res += message.getVectorClock().get(message.getSenderIP());
+        res += message.getVectorClock().toString();
         return res;
     }
 }

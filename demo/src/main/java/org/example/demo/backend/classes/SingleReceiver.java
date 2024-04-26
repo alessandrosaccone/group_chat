@@ -75,7 +75,7 @@ public class SingleReceiver extends Thread {
         String chatID = null;
         String text = null;
         MessageType type = null;
-        HashMap<InetAddress,Integer> vectorClock = null;
+        HashMap<InetAddress,Integer> vectorClock = new HashMap<>();
 
         if (fields.length == 5) {
             try {
@@ -84,10 +84,18 @@ public class SingleReceiver extends Thread {
                 chatID = fields[1];
                 text = fields[2];
                 type = MessageType.valueOf(fields[3]);
-                vectorClock = new HashMap<>();
+                String trimmedString = fields[4].trim().substring(1,fields[4].length()-1); // cutting off the { ... } separators
+                for(String entry: trimmedString.split(",")){
+                    InetAddress key = InetAddress.getByName(entry.split("=")[0].split("/")[1]);
+                    int value = Integer.parseInt(entry.split("=")[1]);
+                    vectorClock.put(key,value);
+                }
+
                 vectorClock.put(senderIP, Integer.valueOf(fields[4]));
             } catch (IllegalArgumentException e) {
                 System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"ERROR on parsing the message:"+e.getMessage());
+            } catch (UnknownHostException e) {
+                System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"ERROR on parsing the address while reading the vector clock:"+e.getMessage());
             }
         }
 
