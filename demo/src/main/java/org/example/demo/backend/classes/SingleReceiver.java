@@ -91,7 +91,6 @@ public class SingleReceiver extends Thread {
                     vectorClock.put(key,value);
                 }
 
-                vectorClock.put(senderIP, Integer.valueOf(fields[4]));
             } catch (IllegalArgumentException e) {
                 System.out.println("RECEIVER: ["+ LocalTime.now()+"]"+"ERROR on parsing the message:"+e.getMessage());
             } catch (UnknownHostException e) {
