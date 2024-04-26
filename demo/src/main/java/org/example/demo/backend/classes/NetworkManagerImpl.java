@@ -52,8 +52,8 @@ public class NetworkManagerImpl implements NetworkManager {
             String partialLocalAddress = InetAddress.getLocalHost().toString().split("/")[1];
             this.localAddress = InetAddress.getByName(partialLocalAddress);
         } catch (IOException e) {
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Server Socket error: "+ e.getMessage());
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Application terminated due to a set up error.");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Server Socket error: "+ e.getMessage());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Application terminated due to a set up error.");
             System.exit(-1);
         }
         // threads initialization
@@ -82,14 +82,14 @@ public class NetworkManagerImpl implements NetworkManager {
             this.senders.add(sender);
             sender.start();
         }
-        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"All thread correctly started");
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" All thread correctly started");
     }
 
     @Override
     // this method just "remove" from the set of requestor the Requestor that is just terminated
     public synchronized void RequestorTerminated(InetAddress node) {
         this.connectionRequestors.replace(node,null);
-        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Requestor for node "+ node.toString()+ "has terminated its job");
+        System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Requestor for node "+ node.toString()+ "has terminated its job");
     }
 
     // this method brutally terminates all the thread and related socket connections
@@ -97,9 +97,9 @@ public class NetworkManagerImpl implements NetworkManager {
     public synchronized void closeAllConnections() {
         try{
             //TODO: convert in log
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of sender to close: "+this.senders.size());
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of receiver to close: "+this.receivers.size());
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Number of requestor to close: "+this.connectionRequestors.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Number of sender to close: "+this.senders.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Number of receiver to close: "+this.receivers.size());
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Number of requestor to close: "+this.connectionRequestors.size());
             // interrupting connectionAcceptor
             this.connectionAcceptor.interrupt();
             this.serverSocket.close();
@@ -111,11 +111,11 @@ public class NetworkManagerImpl implements NetworkManager {
                 if(this.connectionRequestors.get(node) != null){ this.connectionRequestors.get(node).interrupt();}
                 if(this.sockets.get(node) != null) { this.sockets.get(node).close(); }
                 //TODO: convert in log
-                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"All connections with " + node.getHostAddress() +" closed");
+                System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" All connections with " + node.getHostAddress() +" closed");
             }
         } catch (IOException e) {
             // In any case the application closes
-            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on closing sockets");
+            System.out.println("NETMAN: ["+ LocalTime.now()+"]"+ "Error on closing sockets");
             throw new RuntimeException(e);
         }
 
@@ -170,7 +170,7 @@ public class NetworkManagerImpl implements NetworkManager {
               and remove itself from the requestor list before terminating.
          */
             System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"No new requestor needed for node " + node +
-                    "\nAvailable connections: "+ this.sockets.keySet().toString());
+                    "\nAvailable connections: "+ this.sockets.keySet());
         }
     }
 
@@ -186,7 +186,7 @@ public class NetworkManagerImpl implements NetworkManager {
             try{
                 newSocket.close();
                 System.out.println("NETMAN: ["+ LocalTime.now()+"]"+ "Connection with node "+node.toString()+ "already existing. Connection discarded\n"+
-                        "Available connections: "+ this.sockets.keySet().toString());
+                        "Available connections: "+ this.sockets.keySet());
 
             } catch (IOException e) {
                 System.out.println("NETMAN: ["+ LocalTime.now()+"]"+"Error on closing socket for node "+node.toString());
