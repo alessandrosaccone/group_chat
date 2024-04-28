@@ -40,8 +40,6 @@ public class TitlePageController extends GuiController implements Initializable,
     @FXML
     private Button addHostButton;
     @FXML
-    private Label yourIpLabel;
-    @FXML
     private TextField yourIpTextField;
     @FXML
     private Button addYourIpButton;
@@ -231,12 +229,6 @@ public class TitlePageController extends GuiController implements Initializable,
         numUserChoice.setOnAction(e -> {
             numberOfUsers = numUserChoice.getValue();
         });
-        //setAddressesBox.getItems().add("you");
-        try {
-            yourIpLabel.setText(InetAddress.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
