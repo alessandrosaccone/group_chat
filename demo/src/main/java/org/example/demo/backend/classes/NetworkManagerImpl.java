@@ -28,7 +28,7 @@ public class NetworkManagerImpl implements NetworkManager {
     private final ArrayList<SingleReceiver> receivers;
     private final ArrayList<SingleSender> senders;
 
-    public NetworkManagerImpl(int localPort, ArrayList<InetAddress> nodes){
+    public NetworkManagerImpl(int localPort, ArrayList<InetAddress> nodes, String localHost){
         // parameters initialization
         this.messagesToBeSent = new HashMap<>();
         this.chatMessagesToBeShown = new HashMap<>();
@@ -49,12 +49,14 @@ public class NetworkManagerImpl implements NetworkManager {
         for(InetAddress node: nodes){ this.sockets.put(node,null);}
         try {
             this.serverSocket = new ServerSocket(localPort);
-            String partialLocalAddress = InetAddress.getLocalHost().toString().split("/")[1];
-            this.localAddress = InetAddress.getByName(partialLocalAddress);
+            //String partialLocalAddress = InetAddress.getLocalHost().toString().split("/")[1];
+            //just for the project...
+            this.localAddress = InetAddress.getByName(localHost);
         } catch (IOException e) {
             System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Server Socket error: "+ e.getMessage());
             System.out.println("NETMAN: ["+ LocalTime.now()+"]"+" Application terminated due to a set up error.");
             System.exit(-1);
+
         }
         // threads initialization
         threadInitializer();
