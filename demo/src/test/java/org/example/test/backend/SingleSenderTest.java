@@ -43,7 +43,7 @@ class SingleSenderTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        networkManager = new NetworkManagerImpl(localPort, nodes);
+        networkManager = new NetworkManagerImpl(localPort, nodes, "192.168.216.24");
 
         //it should be useful for testing the queues
         networkManager.createNewChat(nodes);

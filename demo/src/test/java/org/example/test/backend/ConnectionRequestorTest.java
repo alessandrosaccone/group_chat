@@ -30,7 +30,7 @@ class ConnectionRequestorTest {
             throw new RuntimeException(e);
         }
         nodes = new ArrayList<>(Collections.singletonList(addr1));
-        networkManager = new NetworkManagerImpl(localPort, nodes); // Passing null for nodes as it's not relevant for this test
+        networkManager = new NetworkManagerImpl(localPort, nodes, "192.168.216.24"); // Passing null for nodes as it's not relevant for this test
         connectionRequestor = new ConnectionRequestor(addr1, localPort, networkManager);
     }
 

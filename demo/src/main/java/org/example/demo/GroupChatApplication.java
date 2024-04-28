@@ -27,8 +27,8 @@ public class GroupChatApplication extends Application {
      * These three attributes are needed for the GUI
      */
     static List<String> fxmls = new ArrayList<>(Arrays.asList("main-page.fxml", "available-chats.fxml"));
-    static Map<String, Scene> scenes = new HashMap<String, Scene>();
-    private static final Map<String, GuiController> guiControllers = new HashMap<String, GuiController>();
+    static Map<String, Scene> scenes = new HashMap<>();
+    private static final Map<String, GuiController> guiControllers = new HashMap<>();
     /**
      * The network manager is the backend of the application leading all the stuffs needed to make this chat application
      * works properly.

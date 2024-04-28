@@ -29,9 +29,9 @@ public class ConnectionRequestor extends Thread {
                 // trying to connect to nodeIP:hostPort
                 Socket socket = new Socket(nodeIP, hostPort);
                 // connection established: the NetworkManager is notified that the task has been completed
+                System.out.println("CONNREQUESTOR: ["+ LocalTime.now()+"]"+"Connection established with node "+nodeIP+" port "+hostPort);
                 networkManager.setNewConnection(nodeIP, socket);
                 networkManager.RequestorTerminated(nodeIP);
-                System.out.println("CONNREQUESTOR: ["+ LocalTime.now()+"]"+"Connection established with node "+nodeIP+" port "+hostPort);
                 return;
 
             } catch (IOException e) {

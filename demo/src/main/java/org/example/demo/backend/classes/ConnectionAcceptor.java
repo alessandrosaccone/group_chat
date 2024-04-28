@@ -23,8 +23,8 @@ public class ConnectionAcceptor extends Thread{
                 //serverSocket.setSoTimeout(0);
                 Socket clientSocket = serverSocket.accept();
                 //serverSocket.setSoTimeout(0);
-                networkManager.setNewConnection(clientSocket.getInetAddress(), clientSocket);
                 System.out.println("CONNACCEPTOR: ["+ LocalTime.now()+"]"+"New connection accepted with node "+ clientSocket.getInetAddress());
+                networkManager.setNewConnection(clientSocket.getInetAddress(), clientSocket);
             } catch (IOException e) {
                 System.out.println("CONNACCEPTOR: ["+ LocalTime.now()+"]"+"Error accepting a connection in Connection Acceptor");
                 e.printStackTrace();
