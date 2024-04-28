@@ -38,8 +38,8 @@ public class GroupChatApplication extends Application {
      */
     private static NetworkManager networkManager;
     private final static ArrayList<InetAddress> addresses = new ArrayList<>();
-
     private static final Map<String, App> chats = new HashMap<>();
+    private static String yourIp;
 
     public static void deleteChat(String chatId) {
         chats.remove(chatId);
@@ -121,7 +121,7 @@ public class GroupChatApplication extends Application {
      */
     public static void setupNetwork(){
         GroupChatApplication.setNetworkManager(new NetworkManagerImpl(1234,
-                GroupChatApplication.getAddresses()));
+                GroupChatApplication.getAddresses(), yourIp));
     }
 
     /**
@@ -134,6 +134,15 @@ public class GroupChatApplication extends Application {
         chats.put(newChat.getChatId(), newChat);
         newChat.createChat();
         newChat.runChat(stage);
+    }
+
+    /**
+     * This method is used as bridge between the given ip of the current host
+     * in the frontend and the creation of the backend
+     * @param ip - the given current host ip
+     */
+    public static void addYourIp(String ip){
+        yourIp = ip;
     }
 
     /**

@@ -41,9 +41,13 @@ public class TitlePageController extends GuiController implements Initializable,
     private Button addHostButton;
     @FXML
     private Label yourIpLabel;
-
+    @FXML
+    private TextField yourIpTextField;
+    @FXML
+    private Button addYourIpButton;
     private int numberOfUsers;
     private boolean confirmedStatus;
+    private boolean isYourIpAdded;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,6 +64,10 @@ public class TitlePageController extends GuiController implements Initializable,
         if(App.getAddresses().isEmpty()){
             System.err.println("IS EMPTY");
             advLabel.setText("Please, select the chat's partecipants!");
+            return;
+        }
+        if(App.getAddresses().size() + 1 != numberOfUsers){
+            advLabel.setText("The number of user does not match with the chat size!");
             return;
         }
         GroupChatApplication.runApplication(new Stage());
@@ -97,7 +105,7 @@ public class TitlePageController extends GuiController implements Initializable,
         }
         System.out.println("User " + chosenUser + " has been selected for the current chat room");
         currentPartecipantsBox.getItems().add(chosenUser);
-        numOfPartecipants.setText(Integer.toString(currentPartecipantsBox.getItems().size() + 1));
+        numOfPartecipants.setText(Integer.toString(currentPartecipantsBox.getItems().size()));
         App.addHostAddress(chosenUser);
     }
 
@@ -108,6 +116,14 @@ public class TitlePageController extends GuiController implements Initializable,
     private void handleConfirmCurrentSetClick(){
         if(confirmedStatus)
             return;
+        if(!isYourIpAdded){
+            advLabel.setText("You have to insert your ip addresses in the given spot!!");
+            return;
+        }
+        if(GroupChatApplication.getAddresses().size() == 0){
+            advLabel.setText("You must populate the set of available addresses!");
+            return;
+        }
         System.out.println("Current set of available addresses confirmed");
         addressIp.setDisable(true);
         addressIp.setOpacity(0.5);
@@ -119,6 +135,32 @@ public class TitlePageController extends GuiController implements Initializable,
     }
 
     /**
+     * This method manage the process of adding the ip of the current of to the backend
+     */
+    @FXML
+    private void handleConfirmYourAddressClick() {
+        String address = yourIpTextField.getText();
+        if(isYourIpAdded){
+            advLabel.setText("Your address has already been added!!");
+            return;
+        }
+        if(address.equals(""))
+            advLabel.setText("Please, insert ip your address in the given spot!!");
+        else {
+            GroupChatApplication.addYourIp(address);
+            System.out.println("You have added your ip address to the system");
+            setAddressesBox.getItems().add("you");
+            yourIpTextField.setText("");
+            advLabel.setText("");
+            yourIpTextField.setDisable(true);
+            yourIpTextField.setOpacity(0.5);
+            addYourIpButton.setDisable(true);
+            addYourIpButton.setOpacity(0.5);
+            isYourIpAdded = true;
+        }
+    }
+
+    /**
      * This method allows the user to insert a new addresses into the set of all the addresses
      */
     @FXML
@@ -126,7 +168,9 @@ public class TitlePageController extends GuiController implements Initializable,
         String address = addressIp.getText();
         if(address.equals(""))
             advLabel.setText("Please, insert an address!!");
-        else {
+        else if(setAddressesBox.getItems().contains(address)){
+            advLabel.setText("You have already added this address!");
+        } else {
             GroupChatApplication.addHostAddress(address);
             System.out.println("Users whose address is " + address + " added to the set of users");
             addressIp.setText("");
@@ -164,7 +208,7 @@ public class TitlePageController extends GuiController implements Initializable,
         numUserChoice.setValue(2);
         addressIp.setText("");
         numberOfUsers = 0;
-        numOfPartecipants.setText("1");
+        numOfPartecipants.setText("0");
         currentPartecipantsBox.getItems().clear();
     }
 
@@ -187,7 +231,7 @@ public class TitlePageController extends GuiController implements Initializable,
         numUserChoice.setOnAction(e -> {
             numberOfUsers = numUserChoice.getValue();
         });
-        setAddressesBox.getItems().add("you");
+        //setAddressesBox.getItems().add("you");
         try {
             yourIpLabel.setText(InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
