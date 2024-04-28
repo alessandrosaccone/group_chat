@@ -35,7 +35,7 @@ class  ConnectionAcceptorTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        networkManager = new NetworkManagerImpl(localPort, nodes);
+        networkManager = new NetworkManagerImpl(localPort, nodes,"192.168.216.24");
         try {
             serverSocket = new ServerSocket(localPort+1);
         } catch (IOException e) {
