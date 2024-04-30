@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo.frontend.controllers.ChatController">
    <children>
-      <Label fx:id="title" layoutX="92.0" layoutY="35.0" text="High Available, Casually Ordered Chat">
+      <Label fx:id="title" layoutX="92.0" layoutY="35.0" text="High Available, Causally Ordered Chat">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
