@@ -1,0 +1,7 @@
+module:org.example.demo
+org.example.demo
+org.example.demo.backend.classes
+org.example.demo.backend.enums
+org.example.demo.backend.interfaces
+org.example.demo.frontend.controllers
+org.example.demo.frontend.listeners

@@ -440,7 +440,7 @@ public class NetworkManagerImpl implements NetworkManager {
 
         return !(alreadyCreated || alreadyExist);
     }
-
+    
     // this method return the set of InetAddresses related to the List passed in the text of the message
     private synchronized ArrayList<InetAddress> getAddressByMessage(String message){
         ArrayList<InetAddress> inetAddresses = new ArrayList<>();
